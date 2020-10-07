@@ -1,0 +1,15 @@
+<div
+        class="waf--field-container {% if field.errors %}waf--field-container--error{% endif %}"
+        data-waf-field
+>
+
+    <div class="waf--field">
+        {% include "wagtail_advanced_form_builder/field_helpers/field_label.html" %}
+        {% include "wagtail_advanced_form_builder/field_helpers/field_help_text.html" %}
+        {{ field }}
+    </div>
+
+    {% include "wagtail_advanced_form_builder/field_helpers/field_error.html" %}
+{#    {% include "wagtail_advanced_form_builder/field_helpers/field_stop_condition.html" with field=field %}#}
+
+</div>

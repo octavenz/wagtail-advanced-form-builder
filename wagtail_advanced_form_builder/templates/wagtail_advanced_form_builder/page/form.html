@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+      <link rel="stylesheet" type="text/css" href="{% static 'wagtail_advanced_form_builder/css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include 'wagtail_advanced_form_builder/page/form_wrapper_start.html' %}
+    {% include 'wagtail_advanced_form_builder/blocks/inline_form_block.html' %}
+    {% include 'wagtail_advanced_form_builder/page/form_wrapper_end.html' %}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'wagtail_advanced_form_builder/js/formbuilder.js' %}"></script>
+{% endblock %}

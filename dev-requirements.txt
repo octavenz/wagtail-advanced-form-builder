@@ -1,0 +1,4 @@
+-r test-requirements.txt
+django-debug-toolbar==2.2
+ipdb==0.13.3
+jupyter==1.0.0

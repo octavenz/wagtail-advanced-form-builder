@@ -1,0 +1,29 @@
+# {{ ansible_managed }}
+
+"""
+This file should contain any automatically managed local configuration.
+
+"""
+
+DATABASES = {
+{# because we usually only have a single db running locally we have set some sane defaults, however #}
+{# if more than one database is defined then you must specify db.name else Django will error #}
+{% for db in item.databases %}
+    '{{ db.name | default('default') }}': {
+        'ENGINE': '{{ db.engine | default('django.db.backends.postgresql_psycopg2') }}',
+        'NAME': '{{ db.db_name }}',
+        'USER': '{{ db.user }}',
+        'PASSWORD': '{{ db.password }}',
+        'HOST': '{{ db.host | default('127.0.0.1') }}',
+        'PORT': '{{ db.port | default('5432') }}',
+        'CONN_MAX_AGE': 600,
+    },
+{% endfor %}
+}
+
+{# pass arbitrary key value pairs to write to the local settings. Note the required key and value definitions. #}
+{% for local_var in item.managed_local_variables %}
+{{ local_var.key }} = {{ local_var.value }}
+{# the following blank line is intentional to make it easier to read. #}
+
+{% endfor %}

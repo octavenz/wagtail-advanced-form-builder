@@ -1,0 +1,25 @@
+---
+postgres_version: 10
+postgresql_python_library: python3-psycopg2
+postgres_dbs: []
+
+pythonenv_python_binary: python3
+pythonenv_pip_package: "{{ pythonenv_python_binary}}-pip"
+pythonenv_pip_binary: pip3
+python_standard_packages:
+  - "{{ pythonenv_python_binary }}-setuptools"
+
+virtualenv_pip_binary: pip3
+virtual_envs: []
+venv_install_requirements: true
+
+django: []
+django_migrate: true
+
+mailcatcher_version: "latest"
+mailcatcher_ruby_minor_version: "4"
+mailcatcher_dependencies:
+  - "ruby2.{{ mailcatcher_ruby_minor_version }}"
+  - "ruby2.{{ mailcatcher_ruby_minor_version }}-dev"
+  - libsqlite3-dev
+  - build-essential

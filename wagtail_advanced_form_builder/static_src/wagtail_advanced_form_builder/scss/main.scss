@@ -1,0 +1,75 @@
+$spacing-top: 2rem;
+$error-color: #f24949;
+
+.waf--html-field-wrapper,
+.waf--submit-btn-container {
+  margin-top: $spacing-top;
+}
+
+.waf--field-container {
+
+  margin-top: $spacing-top;
+
+  input[type=date],
+  input[type=email],
+  input[type=number],
+  input[type=text],
+  input[type=text],
+  input[type=url],
+  select,
+  textarea {
+    display: block;
+    padding: 1.5rem;
+    border-radius: 4px;
+    width: 100%;
+    border: 1px solid #e5e5e5;
+  }
+
+  .waf--field-label {
+    font-size: 2rem;
+  }
+
+  .waf--field-help-text {
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+
+  .waf--choice-inline {
+    display: inline;
+    margin-right: 50px;
+  }
+
+  .waf--radio-list {
+      list-style: none;
+      margin-left: 0;
+      padding-left: 0;
+  }
+
+  .waf--field-label-choice {
+    padding-left: 10px;
+  }
+
+}
+
+.waf--field-container--error {
+  input[type=date],
+  input[type=email],
+  input[type=number],
+  input[type=text],
+  input[type=text],
+  input[type=url],
+  select,
+  textarea {
+    border-color: $error-color;
+  }
+}
+
+.waf--submit-btn {
+  padding: 1rem 2rem;
+}
+
+.waf--field-error {
+  color: $error-color;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}

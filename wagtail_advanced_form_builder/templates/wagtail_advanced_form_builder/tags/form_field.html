@@ -1,0 +1,25 @@
+{% load wagtail_advanced_form_builder_tags %}
+
+{% wrap_form_builder_field field as field %}
+
+{# Uncomment this block if you want to see the fieldtype output for each field.#}
+{#{% if DEBUG %}#}
+{#    {{ field|fieldtype  }}#}
+{#{% endif %}#}
+
+{% if field|fieldtype == 'HTMLOutputWidget' %}
+    {{ field }}
+{% elif field|fieldtype == 'HiddenInput' %}
+    {{ field }}
+{% elif field|fieldtype == 'CheckboxInput'  %}
+    {% include "wagtail_advanced_form_builder/fields/checkbox_field.html" with field=field %}
+{% elif field|fieldtype == 'RadioSelect' or field|fieldtype == 'SideBySideRadioSelectWidget' %}
+    {% include "wagtail_advanced_form_builder/fields/radio_buttons_field.html" with field=field %}
+{% elif field|fieldtype == 'CheckboxSelectMultiple' %}
+    {% include "wagtail_advanced_form_builder/fields/multi_checkbox_field.html" with field=field %}
+{% elif field|fieldtype == 'Textarea' %}
+    {% include "wagtail_advanced_form_builder/fields/text_area_field.html" with field=field %}
+{% else %}
+    {% include "wagtail_advanced_form_builder/fields/default_field.html" with field=field %}
+{% endif %}
+

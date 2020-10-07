@@ -1,0 +1,5 @@
+Django==2.2.14
+django-extensions==3.0.3
+psycopg2-binary==2.8.5
+wagtail==2.10.2
+wagtailextraicons==0.1.3

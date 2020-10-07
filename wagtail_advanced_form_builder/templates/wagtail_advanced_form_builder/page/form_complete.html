@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block extra_css %}
+      <link rel="stylesheet" type="text/css" href="{% static 'wagtail_advanced_form_builder/css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% if page.thanks_page_title %}
+        <h1>{{ page.thanks_page_title }}</h1>
+    {% endif %}
+    <div class="waf--thanks-content">
+        {{ page.thanks_page_content|richtext }}
+    </div>
+{% endblock %}

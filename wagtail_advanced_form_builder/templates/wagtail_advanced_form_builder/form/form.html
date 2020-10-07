@@ -1,0 +1,18 @@
+{% load wagtailcore_tags wagtail_advanced_form_builder_tags %}
+
+<form
+        action="{% pageurl page %}"
+        method="POST"
+        style="display:none"
+        id="waf--form-page-form"
+        class="waf--form"
+        {% if not page.use_browser_validation %}novalidate{% endif %}
+>
+    {% csrf_token %}
+    {% for field in form %}
+        {% form_field field %}
+    {% endfor %}
+    <div class="waf--submit-btn-container" data-waf-field>
+        <input type="submit" class="waf--submit-btn" value="{{ page.submit_button_text }}">
+    </div>
+</form>

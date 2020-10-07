@@ -1,0 +1,15 @@
+{% include "wagtail_advanced_form_builder/form/no_script_notification.html" %}
+
+<script>
+    window.wafFormConditions = {{ conditional_rules|safe }};
+    {% if stop_conditions %}
+        window.wafStopConditions = {{ stop_conditions|safe }};
+    {% endif %}
+</script>
+
+{% include "wagtail_advanced_form_builder/form/form.html" %}
+
+
+
+
+

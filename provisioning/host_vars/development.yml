@@ -1,0 +1,37 @@
+---
+site_user_name: vagrant
+site_venv_path: "/home/{{ site_user_name }}/.virtualenvs/waf"
+site_root: "/home/{{ site_user_name }}/waf"
+
+virtual_envs:
+  - path: "{{ site_venv_path }}"
+    user: "{{ site_user_name }}"
+    python_version: python3
+    requirements_destination: "{{ site_root }}/dev-requirements.txt"
+
+postgres_dbs:
+  - name: waf_pg_db
+    user: vagrant
+    password: waffity
+    role_attrs: SUPERUSER
+  - name: waf_pg_db
+    user: waf_pg_db
+    password: waffity
+    role_attrs: SUPERUSER
+  - name: test_waf_pg_db
+    user: waf_pg_db
+    password: waffity
+
+django:
+  - virtual_env_path: "{{ site_venv_path }}"
+    user: "{{ site_user_name }}"
+    app_path: "{{ site_root }}/"
+    settings: build_test.settings.dev
+    databases:
+      - name: default
+        db_name: waf_pg_db
+        user: waf_pg_db
+        password: waffity
+    managed_local_variables:
+      - key: SECRET_KEY
+        value: "'ooolalalasecretsecrets'"

@@ -1,0 +1,21 @@
+{
+  "name": "wagtail_advanced_form_builder",
+  "version": "0.1.0",
+  "repository": "https://github.com/octavenz/wagtail-advanced-form-builder",
+  "private": true,
+  "scripts": {
+    "build": "npm run clean && webpack",
+    "clean": "rm -rf wagtail_advanced_form_builder/static"
+  },
+  "devDependencies": {
+    "css-loader": "^3.3.2",
+    "file-loader": "^5.0.2",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.13.0",
+    "on-build-webpack": "^0.1.0",
+    "sass-loader": "^8.0.0",
+    "url-loader": "^3.0.0",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.1"
+  }
+}

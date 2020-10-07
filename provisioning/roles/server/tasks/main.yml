@@ -1,0 +1,181 @@
+---
+- name: Make sure all Ubuntu respositories are added
+  apt_repository:
+    repo: "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} main universe restricted multiverse"
+    state: present
+
+- name: Update APT cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: Add PostgreSQL APT repository key
+  apt_key:
+    id: ACCC4CF8
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+
+- name: Add official PostgreSQL APT repository
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+
+- name: Install PostgreSQL
+  apt:
+    name: "postgresql-{{ postgres_version }}"
+    state: present
+
+- name: Install libpq-dev package
+  apt:
+    name: libpq-dev
+    state: present
+
+- name: Install postgresql-contrib package
+  apt:
+    name: "postgresql-contrib-{{ postgres_version }}"
+    state: present
+
+- name: Install {{ postgresql_python_library }} package
+  apt:
+    name: "{{ postgresql_python_library }}"
+    state: present
+
+- name: Enable and start PostgreSQL
+  service:
+    name: postgresql
+    enabled: yes
+    state: started
+
+- name: Create Postgres Databases
+  become_user: postgres
+  postgresql_db:
+    name: "{{ item.name }}"
+    encoding: "UTF-8"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ postgres_dbs }}"
+  no_log: true
+
+- name: Create Postgres Users
+  become_user: postgres
+  postgresql_user:
+    db: "{{ item.name }}"
+    name: "{{ item.user }}"
+    password: "{{ item.password }}"
+    priv: ALL
+    role_attr_flags: "{{ item.role_attrs | default('LOGIN') }}"
+    encrypted: yes
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ postgres_dbs }}"
+  no_log: true
+
+- name: Set PostgreSQL database ownership
+  become_user: postgres
+  postgresql_db:
+    name: "{{ item.name }}"
+    owner: "{{ item.user }}"
+  with_items: "{{ postgres_dbs }}"
+  no_log: true
+
+
+- name: Install Python development package
+  apt:
+    name: "{{ pythonenv_python_binary }}-dev"
+    state: present
+
+- name: Install Pip
+  apt:
+    name: "{{ pythonenv_pip_package }}"
+    state: present
+
+- name: Install python standard packages
+  apt:
+    name: "{{ python_standard_packages }}"
+
+- name: Install VirtualEnv
+  pip:
+    name: virtualenv
+    executable: "{{ virtualenv_pip_binary }}"
+    state: present
+
+- name: Create virtual environments
+  command: "virtualenv {{ item.path }} -p {{ item.python_version }}"
+  with_items: "{{ virtual_envs }}"
+  become: yes
+  become_user: "{{ item.user }}"
+
+- name: Install requirements
+  pip:
+    requirements: "{{ item.requirements_destination }}"
+    virtualenv: "{{ item.path }}"
+  when: venv_install_requirements
+  with_items: "{{ virtual_envs }}"
+
+- name: Install memcached package
+  apt:
+    name: memcached
+    state: present
+
+- name: Ensures settings/local directory exists
+  file:
+    path: "{{ item.app_path }}build_test/settings/local"
+    state: directory
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+  with_items: "{{ django }}"
+  no_log: true
+
+- name: Create managed local application __init__ file
+  template:
+    dest: "{{ item.app_path }}build_test/settings/local/__init__.py"
+    src: local.__init__.py.j2
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+  with_items: "{{ django }}"
+  no_log: true
+
+- name: Create managed local application settings
+  template:
+    dest: "{{ item.app_path }}build_test/settings/local/_managed.py"
+    src: local._managed.py.j2
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+  with_items: "{{ django }}"
+  no_log: true
+
+- name: Ensure the manual local application settings exist
+  file:
+    path: "{{ item.app_path }}build_test/settings/local/_manual.py"
+    state: touch
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+  with_items: "{{ django }}"
+  no_log: true
+
+- name: Migrate Django databases
+  django_manage:
+    command: migrate
+    app_path: "{{ item.0.app_path }}"
+    virtualenv: "{{ item.0.virtual_env_path }}"
+    settings: "{{ item.0.settings }}"
+    database: "{{ item.1.name }}"
+  remote_user: "{{ item.0.user }}"
+  with_subelements:
+    - "{{ django }}"
+    - databases
+
+- name: Add Ruby repositories
+  apt_repository: repo=ppa:brightbox/ruby-ng
+
+- name: Install MailCatcher Dependencies
+  apt:
+    name: "{{ item }}"
+    state: "{{ apt_install_state | default('latest') }}"
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  with_items: "{{ mailcatcher_dependencies }}"
+
+- name: Install MailCatcher
+  gem:
+    name: mailcatcher
+    state: latest
+    user_install: false
+    executable: "/usr/bin/gem2.{{ mailcatcher_ruby_minor_version }}"
+  when: "mailcatcher_version == 'latest'"
