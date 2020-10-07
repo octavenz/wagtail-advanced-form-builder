@@ -12,14 +12,18 @@ try:
 except ImportError:
     pass
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
 setup(
     name="wagtail-advanced-form-builder",
-    version="0.1.0",
+    version="0.1.1",
     description="Wagtail Advanced Form Builder",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Richard Blake (Octave)",
     author_email="richard.blake@octave.nz",
-    url="https://octave.nz",
+    url="https://wagtail-advanced-form-builder.readthedocs.io/en/latest/",
     packages=find_packages(),
     include_package_data=True,
     license="BSD",
