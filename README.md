@@ -11,3 +11,11 @@ create forms with conditional logic.
 
 Please report bugs or issues using the [Issue Tracker](https://github.com/octavenz/wagtail-advanced-form-builder/issues) 
 
+# Authors
+
+* Richard Blake ([Octave](https://octave.nz))
+
+# License
+
+This project is licensed under the BSD License - see the [LICENSE file](./LICENCE) for details
+
