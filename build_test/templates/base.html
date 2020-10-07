@@ -12,7 +12,9 @@
         {% endblock %}
     </head>
     <body>
-        {% block content %}{% endblock %}
+        <div style="padding: 50px; max-width: 500px; margin: 0 auto;">
+            {% block content %}{% endblock %}
+        </div>
         {% block extra_js %}
             {# Override this in templates to add extra javascript #}
         {% endblock %}

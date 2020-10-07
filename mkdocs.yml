@@ -1,0 +1,7 @@
+site_name: Wagtail Advanced Form Builder
+nav:
+    - Home: index.md
+    - Installing: installing.md
+    - Usage:
+        - Settings: usage/settings.md
+theme: readthedocs
