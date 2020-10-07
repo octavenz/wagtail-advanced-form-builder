@@ -49,11 +49,11 @@ class BaseFieldBlock(blocks.StructBlock):
         help_text='Set a default value for this field.'
     )
 
-    placeholder = blocks.CharBlock(
-        max_length=255,
-        required=False,
-        help_text='Set a placeholder for the field.'
-    )
+    # placeholder = blocks.CharBlock(
+    #     max_length=255,
+    #     required=False,
+    #     help_text='Set a placeholder for the field.'
+    # )
 
     help_text = blocks.CharBlock(
         max_length=255,
