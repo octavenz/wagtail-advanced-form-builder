@@ -1,5 +1,6 @@
 include LICENSE *.rst *.txt *.md
 graft wagtail_advanced_form_builder
+recursive-exclude build_test *
 recursive-include docs *
 global-exclude __pycache__
 global-exclude *.py[co]

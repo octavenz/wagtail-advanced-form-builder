@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-
-import sys, os
+import io
 
 from setuptools import setup, find_packages
 
@@ -12,19 +11,18 @@ try:
 except ImportError:
     pass
 
-with open("README.md", "r", encoding="utf-8") as fh:
+with io.open("README.md", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name="wagtail-advanced-form-builder",
-    version="0.1.1",
+    version="0.1.3",
     description="Wagtail Advanced Form Builder",
     long_description=long_description,
-    long_description_content_type="text/markdown",
     author="Richard Blake (Octave)",
     author_email="richard.blake@octave.nz",
-    url="https://wagtail-advanced-form-builder.readthedocs.io/en/latest/",
-    packages=find_packages(),
+    url="https://github.com/octavenz/wagtail-advanced-form-builder",
+    packages=find_packages(exclude=("build_test",)),
     include_package_data=True,
     license="BSD",
     classifiers=[
