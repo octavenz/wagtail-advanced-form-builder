@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "build": "npm run clean && webpack",
+    "watch": "npm run clean && webpack --watch",
     "clean": "rm -rf wagtail_advanced_form_builder/static"
   },
   "devDependencies": {

@@ -1,7 +1,14 @@
 site_name: Wagtail Advanced Form Builder
 nav:
     - Home: index.md
-    - Installing: installing.md
+    - Getting started:
+        - Installation: getting_started/installing.md
+        - Out of the box: getting_started/out_of_the_box.md
     - Usage:
         - Settings: usage/settings.md
-theme: readthedocs
+    - Contributing:
+        - How to: contributing/contributing.md
+theme:
+    name: readthedocs
+    highlightjs: true
+extra_css: [extra.css]
