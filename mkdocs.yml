@@ -4,8 +4,6 @@ nav:
     - Getting started:
         - Installation: getting_started/installing.md
         - Out of the box: getting_started/out_of_the_box.md
-    - Usage:
-        - Settings: usage/settings.md
     - Contributing:
         - How to: contributing/contributing.md
 theme:
