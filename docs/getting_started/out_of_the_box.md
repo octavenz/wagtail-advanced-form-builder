@@ -1,6 +1,6 @@
 # Out of the box
 
-You can use the package straight out of the box by making use of the two in-built Form page types.
+You can use the package straight out of the box by making use of the two in-built Form page types. See the limitations of this approach below.
 
 ## EmailFormPage
 

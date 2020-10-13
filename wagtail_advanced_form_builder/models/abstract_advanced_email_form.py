@@ -20,3 +20,6 @@ class AbstractAdvancedEmailForm(AbstractAdvancedFormMixin, AbstractEmailForm):
     ]
 
     settings_panels = AbstractAdvancedFormMixin.settings_panels
+
+    class Meta:
+        abstract = True
