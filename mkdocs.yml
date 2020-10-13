@@ -4,6 +4,7 @@ nav:
     - Getting started:
         - Installation: getting_started/installing.md
         - Out of the box: getting_started/out_of_the_box.md
+        - Custom page models: getting_started/using_your_own_page_models.md
     - Contributing:
         - How to: contributing/contributing.md
 theme:
