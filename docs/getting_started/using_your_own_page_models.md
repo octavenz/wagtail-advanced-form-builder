@@ -61,12 +61,27 @@ You'll need to implement:
                 ObjectList(Page.settings_panels, heading=_('Settings'), classname="settings"),
             ])
             
-Your Page model HTML template then just needs to iterate over the Streamfield blocks defined in the content property:
+            def get_template(self, request, *args, **kwargs):
+                return 'app/email_form_builder_page.html'
+            
+            
+Your Page model HTML template then just needs to iterate over the Streamfield blocks defined in the content property. If
+you extend from the base wagtail_advanced_form_builder/page/form.html (which extends from base.html) it will include all the JS and CSS the page needs to render and validate the form:
 
-        {% load wagtailcore_tags %}
-        {% for block in page.content %}
-            {% include_block block %}
-        {% endfor %}            
+            {% extends "wagtail_advanced_form_builder/page/form.html" %}
+            {% load wagtailcore_tags %}
+            
+            {% block content %}
+                <div class='my-very-own-page-wrapper'>
+                    <h1>
+                        {{ page.title }}
+                    </h1>
+                    {% for content_block in page.content %}
+                        {% include_block content_block %}
+                    {% endfor %}
+                </div>
+            {% endblock %}
+         
         
 The form will be rendered inline with your other Streamfield block content.        
             
