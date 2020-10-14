@@ -12,7 +12,7 @@ You'll need to implement:
 0. A form field that inherits from <span class='color-red'>AbstractAdvancedFormField</span> and defines a page parental key foreign relationship to your page model.
 0. A Page model that inherits from <span class='color-red'>AbstractAdvancedEmailForm</span> and defines a <span class='color-red'>form_field</span> property that is set to your form field model.
 
-This will give you a page setup that looks something like below with you Form configurable in the second tab:
+This will give you a page setup that looks something like below with your Form configurable in the second tab:
 
 ![Custom Form Page](../screenshots/custom-form-builder-page.png)
 
@@ -35,7 +35,7 @@ This will give you a page setup that looks something like below with you Form co
         class FormBuilderEmailFormField(AbstractAdvancedFormField):
         
             page = ParentalKey(
-                'app.FormBuilderPage',
+                'app.EmailFormBuilderPage',
                 on_delete=models.CASCADE,
                 related_name='form_fields'
             )
