@@ -1,7 +1,6 @@
 import datetime
 
 from django import forms
-from django.conf import settings
 from django.utils import formats
 
 from wagtail.contrib.forms.forms import FormBuilder
