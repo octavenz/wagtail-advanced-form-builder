@@ -197,19 +197,19 @@ function checkConditions() {
             if (actionField.action === 'show') {
                 toggleField(actionField.parent, 'show');
                 if (actionField.required) {
-                    actionField.field.setAttribute('required', true);
+                    actionField.field.required = true;
                 }
             } else {
                 toggleField(actionField.parent, 'hide');
-                actionField.field.setAttribute('required', false);
+                actionField.field.required = false
             }
         } else if (actionField.action === 'show') {
             toggleField(actionField.parent, 'hide');
-            actionField.field.setAttribute('required', false);
+            actionField.field.required = false;
         } else {
             toggleField(actionField.parent, 'show');
             if (actionField.required) {
-                actionField.field.setAttribute('required', true);
+                actionField.field.required = true;
             }
         }
     });
