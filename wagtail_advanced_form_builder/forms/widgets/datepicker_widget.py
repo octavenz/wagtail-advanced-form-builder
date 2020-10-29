@@ -22,6 +22,10 @@ class DatePickerWidget(DateInput):
         return attrs
 
     def format_value(self, value):
+
+        if value is None:
+            return None
+
         # From what I can ascertain from examining the Django models.DateField is that DateFields are always stored
         # as YYYY-MM-DD format in the db. So we have a string here in that format always in theory. So convert that to
         # a date and then fling it through the localize_input method to get it out how we want it for display.
