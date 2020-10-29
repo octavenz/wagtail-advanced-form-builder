@@ -24,6 +24,7 @@ OVERRIDE_FORM_FIELD_CHOICES = (
     (consts.FIELD_TYPE_CURRENCY, _('Currency field')),
     (consts.FIELD_TYPE_SIMPLE_DATE, _('Date')),
     (consts.FIELD_TYPE_PHONE, _('Phone')),
+    (consts.FIELD_TYPE_DATEPICKER, _('Datepicker field')),
 )
 
 
@@ -77,6 +78,21 @@ class AbstractAdvancedFormField(AbstractFormField, ClusterableModel):
 
     display_checkbox_label = models.BooleanField(
         default=False,
+    )
+
+    # Storage for date fields
+    maximum_date = models.CharField(
+        max_length=255,
+        blank=True,
+        default=None,
+        null=True,
+    )
+
+    minimum_date = models.CharField(
+        max_length=255,
+        blank=True,
+        default=None,
+        null=True,
     )
 
     @property

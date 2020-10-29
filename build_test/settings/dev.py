@@ -64,13 +64,13 @@ WSGI_APPLICATION = 'build_test.wsgi.application'
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-GB'
 
 TIME_ZONE = 'Pacific/Auckland'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -121,7 +121,24 @@ TEMPLATES = [
     },
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': "django_redis.cache.RedisCache",
+        'LOCATION': "redis://127.0.0.1:6379",
+        'OPTIONS': {
+            'CLIENT_CLASS': "django_redis.client.DefaultClient",
+        },
+        'KEY_PREFIX': 'waf-test-site',
+    },
+}
+
 WAGTAIL_SITE_NAME = 'Wagtail Advanced Form Builder Test'
+
+DATE_INPUT_FORMATS = [
+    '%d/%m/%Y',
+]
+
+WAGTAIL_DATE_FORMAT = '%d/%m/%Y'
 
 try:
     from .local import *

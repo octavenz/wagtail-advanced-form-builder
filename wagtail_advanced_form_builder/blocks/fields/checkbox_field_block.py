@@ -24,6 +24,10 @@ class CheckboxFieldBlock(BaseFieldBlock):
 
     placeholder = None
 
+    maximum_date = None
+
+    minimum_date = None
+
 
     class Meta:
 

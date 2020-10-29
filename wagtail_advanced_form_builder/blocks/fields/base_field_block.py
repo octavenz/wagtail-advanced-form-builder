@@ -49,6 +49,16 @@ class BaseFieldBlock(blocks.StructBlock):
         help_text='Set a default value for this field.'
     )
 
+    maximum_date = blocks.DateBlock(
+        help_text='The most recent date a user can select',
+        required=False,
+    )
+
+    minimum_date = blocks.DateBlock(
+        help_text='The earliest date a user can select',
+        required=False,
+    )
+
     # placeholder = blocks.CharBlock(
     #     max_length=255,
     #     required=False,

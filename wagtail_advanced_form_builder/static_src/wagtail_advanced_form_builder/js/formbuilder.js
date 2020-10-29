@@ -1,3 +1,8 @@
+import { Datepicker } from 'vanillajs-datepicker';
+import toDate from 'date-fns/toDate';
+let wafDateFormat = null;
+
+
 function findFieldsFromName(name, returnOneOnly = false) {
     const fields = document.getElementsByName(name);
     if (fields.length) {
@@ -82,6 +87,10 @@ function toggleField(field, showHide) {
     }
 }
 
+function parseDateStringToTime(dateString) {
+    return Datepicker.parseDate(dateString, wafDateFormat)
+}
+
 function conditionsPassed(conditionRule, conditionValue, conditionField) {
     let conditionFieldValue = null;
     let parsedValue = null;
@@ -108,35 +117,68 @@ function conditionsPassed(conditionRule, conditionValue, conditionField) {
         }
         break;
     case 'greater_than':
-        conditionFieldValue = parseFloat(conditionField.value);
-        parsedValue = parseFloat(conditionValue);
-        // eslint-disable-next-line no-restricted-globals
-        if (isNaN(conditionFieldValue) || conditionFieldValue <= parsedValue) {
-            return false;
+        if (conditionField.type === 'datepicker') {
+            conditionFieldValue = parseDateStringToTime(conditionField.value);
+            parsedValue = parseDateStringToTime(conditionValue);
+            if (conditionFieldValue <= parsedValue) {
+                return false;
+            }
+        } else {
+            conditionFieldValue = parseFloat(conditionField.value);
+            parsedValue = parseFloat(conditionValue);
+            // eslint-disable-next-line no-restricted-globals
+            if (isNaN(conditionFieldValue) || conditionFieldValue <= parsedValue) {
+                return false;
+            }
         }
         break;
     case 'greater_than_equal':
-        conditionFieldValue = parseFloat(conditionField.value);
-        parsedValue = parseFloat(conditionValue);
-        // eslint-disable-next-line no-restricted-globals
-        if (isNaN(conditionFieldValue) || conditionFieldValue < parsedValue) {
-            return false;
+        if (conditionField.type === 'datepicker') {
+            conditionFieldValue = parseDateStringToTime(conditionField.value);
+            parsedValue = parseDateStringToTime(conditionValue);
+            if (conditionFieldValue < parsedValue) {
+                return false;
+            }
+        } else {
+            conditionFieldValue = parseFloat(conditionField.value);
+            parsedValue = parseFloat(conditionValue);
+            // eslint-disable-next-line no-restricted-globals
+            if (isNaN(conditionFieldValue) || conditionFieldValue < parsedValue) {
+                return false;
+            }
         }
+
         break;
     case 'less_than':
-        conditionFieldValue = parseFloat(conditionField.value);
-        parsedValue = parseFloat(conditionValue);
-        // eslint-disable-next-line no-restricted-globals
-        if (isNaN(conditionFieldValue) || conditionFieldValue >= parsedValue) {
-            return false;
+        if (conditionField.type === 'datepicker') {
+            conditionFieldValue = parseDateStringToTime(conditionField.value);
+            parsedValue = parseDateStringToTime(conditionValue);
+            if (conditionFieldValue >= parsedValue) {
+                return false;
+            }
+        } else {
+            conditionFieldValue = parseFloat(conditionField.value);
+            parsedValue = parseFloat(conditionValue);
+            // eslint-disable-next-line no-restricted-globals
+            if (isNaN(conditionFieldValue) || conditionFieldValue >= parsedValue) {
+                return false;
+            }
         }
         break;
     case 'less_than_equal':
-        conditionFieldValue = parseFloat(conditionField.value);
-        parsedValue = parseFloat(conditionValue);
-        // eslint-disable-next-line no-restricted-globals
-        if (isNaN(conditionFieldValue) || conditionFieldValue > parsedValue) {
-            return false;
+        if (conditionField.type === 'datepicker') {
+            conditionFieldValue = parseDateStringToTime(conditionField.value);
+            parsedValue = parseDateStringToTime(conditionValue);
+            if (conditionFieldValue > parsedValue) {
+                return false;
+            }
+        } else {
+            conditionFieldValue = parseFloat(conditionField.value);
+            parsedValue = parseFloat(conditionValue);
+            // eslint-disable-next-line no-restricted-globals
+            if (isNaN(conditionFieldValue) || conditionFieldValue > parsedValue) {
+                return false;
+            }
         }
         break;
     case 'contains':
@@ -183,6 +225,7 @@ function checkConditions() {
             const conditionField = {};
             conditionField.field = findFieldsFromName(cond.field_name);
             conditionField.value = getFieldValue(conditionField.field);
+            conditionField.type = cond.field_type;
 
             // Check whether the conditions have passed for this field.
             allConditionsPassed = conditionsPassed(conditionRule, conditionValue, conditionField);
@@ -231,6 +274,38 @@ function initialiseFormListeners(form) {
             }
         }
     });
+
+    form.addEventListener('submit', (e) => {
+        // Grab any date pickers and update their values to same format as Django
+        const datePickers = document.querySelectorAll('input[data-waf-datepicker]');
+        datePickers.forEach((dp) => {
+            if (dp.value.length) {
+                let dateTimeStamp = Datepicker.parseDate(dp.value, wafDateFormat);
+                dp.value = Datepicker.formatDate(toDate(dateTimeStamp), 'yyyy-mm-dd');
+            }
+        });
+    });
+}
+
+function initialiseFormFields() {
+
+    // Initialise date pickers
+    const datePickers = document.querySelectorAll('input[data-waf-datepicker]');
+    datePickers.forEach((dp) => {
+        wafDateFormat = dp.getAttribute('data-waf-date-format');
+        new Datepicker(dp, {
+            'format': wafDateFormat,
+            'container': `[data-waf-datepicker--${dp.getAttribute('name')}]`,
+            'autohide': true,
+            'maxDate': dp.getAttribute('data-waf-datepicker-max-date'),
+            'minDate': dp.getAttribute('data-waf-datepicker-min-date')
+            // ...options
+        });
+        dp.addEventListener('changeDate', () => {
+            checkConditions();
+        });
+    });
+
 }
 
 function scrollToError() {
@@ -244,6 +319,9 @@ function init() {
     if (window.wafFormConditions) {
         // Grab the form
         const form = document.getElementById('waf--form-page-form');
+
+        // Initialise form field displays
+        initialiseFormFields();
 
         // Initialise the form listeners
         initialiseFormListeners(form);

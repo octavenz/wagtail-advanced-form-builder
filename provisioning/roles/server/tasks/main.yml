@@ -179,3 +179,15 @@
     user_install: false
     executable: "/usr/bin/gem2.{{ mailcatcher_ruby_minor_version }}"
   when: "mailcatcher_version == 'latest'"
+
+- name: Install Redis
+  apt:
+    name: redis-server
+    state: present
+
+- name: Enable and start Redis
+  service:
+    name: redis-server
+    state: started
+    enabled: yes
+

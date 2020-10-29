@@ -19,6 +19,10 @@ class MultiLineFieldBlock(BaseFieldBlock):
 
     placeholder = None
 
+    maximum_date = None
+
+    minimum_date = None
+
     class Meta:
         form_classname = 'waf--field'
         icon = 'extraicons--text-box'

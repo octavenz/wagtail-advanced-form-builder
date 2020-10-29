@@ -4,6 +4,7 @@ from django.db import models
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
 from wagtail.core.fields import RichTextField, StreamField
@@ -14,7 +15,9 @@ from wagtail_advanced_form_builder.forms import AdvancedFormBuilder
 from .form_field import FormField
 
 import wagtail_advanced_form_builder.constants as consts
-from wagtail_advanced_form_builder.utils import clean_form_field_name
+from wagtail_advanced_form_builder.utils import clean_form_field_name, parse_date_string_to_date, \
+    get_datepicker_date_format
+from ..admin.submissions_list_view import FormBuilderSubmissionsListView
 from ..blocks.fields.checkbox_field_block import CheckboxFieldBlock
 from ..blocks.fields.checkboxes_field_block import CheckboxesFieldBlock
 from ..blocks.fields.dropdown_field_block import DropdownFieldBlock
@@ -26,10 +29,17 @@ from ..blocks.fields.multiselect_field_block import MultiSelectFieldBlock
 from ..blocks.fields.number_field_block import NumberFieldBlock
 from ..blocks.fields.radio_field_block import RadioFieldBlock
 from ..blocks.fields.url_field_block import URLFieldBlock
+from ..blocks.fields.datepicker_field_block import DatePickerFieldBlock
 
 
-def parse_condition_value(value):
-
+def initial_parse_condition_value(value):
+    """
+    Do some basic tidy up on the condition value before we jump into the rules
+    Type casting happens within the condition rule conditionals within the
+    conditions_passed function.
+    :param value:
+    :return:
+    """
     if value is False or value is None:
         return ''
 
@@ -44,9 +54,8 @@ def parse_condition_value(value):
 
     return value
 
-def conditions_passed(condition_rule, condition_value, condition_field_value):
-
-    condition_field_value = parse_condition_value(condition_field_value)
+def conditions_passed(condition_rule, condition_value, condition_field_value, condition_field_type):
+    condition_field_value = initial_parse_condition_value(condition_field_value)
 
     if condition_rule == consts.FIELD_RULE_IS:
         if condition_field_value != condition_value:
@@ -66,39 +75,59 @@ def conditions_passed(condition_rule, condition_value, condition_field_value):
 
     if condition_rule == consts.FIELD_RULE_GREATER_THAN:
         try:
-            condition_field_value = float(condition_field_value)
-            condition_value = float(condition_value)
-            if condition_field_value <= condition_value:
-                return False
+            if condition_field_type in ['datepicker']:
+                condition_value = parse_date_string_to_date(condition_value, get_datepicker_date_format())
+                if condition_field_value <= condition_value:
+                    return False
+            else:
+                condition_field_value = float(condition_field_value)
+                condition_value = float(condition_value)
+                if condition_field_value <= condition_value:
+                    return False
         except ValueError:
-            pass
+            return False
 
     if condition_rule == consts.FIELD_RULE_GREATER_THAN_OR_EQUAL:
         try:
-            condition_field_value = float(condition_field_value)
-            condition_value = float(condition_value)
-            if condition_field_value < condition_value:
-                return False
+            if condition_field_type in ['datepicker']:
+                condition_value = parse_date_string_to_date(condition_value, get_datepicker_date_format())
+                if condition_field_value < condition_value:
+                    return False
+            else:
+                condition_field_value = float(condition_field_value)
+                condition_value = float(condition_value)
+                if condition_field_value < condition_value:
+                    return False
         except ValueError:
-            pass
+            return False
 
     if condition_rule == consts.FIELD_RULE_LESS_THAN:
         try:
-            condition_field_value = float(condition_field_value)
-            condition_value = float(condition_value)
-            if condition_field_value >= condition_value:
-                return False
+            if condition_field_type in ['datepicker']:
+                condition_value = parse_date_string_to_date(condition_value, get_datepicker_date_format())
+                if condition_field_value >= condition_value:
+                    return False
+            else:
+                condition_field_value = float(condition_field_value)
+                condition_value = float(condition_value)
+                if condition_field_value >= condition_value:
+                    return False
         except ValueError:
-            pass
+            return False
 
     if condition_rule == consts.FIELD_RULE_LESS_THAN_OR_EQUAL:
         try:
-            condition_field_value = float(condition_field_value)
-            condition_value = float(condition_value)
-            if condition_field_value > condition_value:
-                return False
+            if condition_field_type in ['datepicker']:
+                condition_value = parse_date_string_to_date(condition_value, get_datepicker_date_format())
+                if condition_field_value > condition_value:
+                    return False
+            else:
+                condition_field_value = float(condition_field_value)
+                condition_value = float(condition_value)
+                if condition_field_value > condition_value:
+                    return False
         except ValueError:
-            pass
+            return False
 
     if condition_rule == consts.FIELD_RULE_CONTAINS:
         if condition_value not in condition_field_value:
@@ -135,9 +164,11 @@ def clean_form(self):
             for cond in condition['conditions']:
                 condition_rule = cond['rule']
                 condition_value = cond['value']
+                condition_field_type = cond['field_type']
+
                 condition_field_value = self.cleaned_data.get(cond['field_name'], None)
 
-                all_conditions_passed = conditions_passed(condition_rule, condition_value, condition_field_value)
+                all_conditions_passed = conditions_passed(condition_rule, condition_value, condition_field_value, condition_field_type)
                 if not all_conditions_passed:
                     break
 
@@ -159,6 +190,8 @@ class AbstractAdvancedFormMixin(models.Model):
 
     form_field = FormField
 
+    submissions_list_view_class = FormBuilderSubmissionsListView
+
     form = StreamField(
         [
             (consts.FIELD_TYPE_SINGLE_LINE, SingleLineFieldBlock(label=_('Basic field'))),
@@ -173,6 +206,7 @@ class AbstractAdvancedFormMixin(models.Model):
             (consts.FIELD_TYPE_URL, URLFieldBlock(label=_('URL field'))),
             (consts.FIELD_TYPE_HIDDEN, HiddenFieldBlock(label=_('Hidden field'))),
             (consts.FIELD_TYPE_NUMBER, NumberFieldBlock(label=_('Number field'))),
+            (consts.FIELD_TYPE_DATEPICKER, DatePickerFieldBlock(label=_('Datepicker field'))),
         ],
         default=None,
         null=True,
@@ -234,16 +268,18 @@ class AbstractAdvancedFormMixin(models.Model):
         :return: Dict
         """
         conditional_rules = []
+        field_type_mapping = {}
 
         for field in self.form.get_prep_value():
 
+            field_name = field['value'].get('label', None)
+            if field_name:
+                field_name = clean_form_field_name(field_name)
+
+            field_type_mapping[field_name] =  field.get('type', None)
             rules = field['value'].get('rules', None)
             if rules:
-                field_id = field['value'].get('field_id', None)
-                if field_id:
-                    rules['field_name'] = field_id
-                else:
-                    rules['field_name'] = clean_form_field_name(field['value']['label'])
+                rules['field_name'] = clean_form_field_name(field_name)
                 rules['required'] = field['value'].get('required', False)
                 rules['field_type'] = field.get('type', None)
                 conditions = rules.get('conditions', None)
@@ -251,9 +287,11 @@ class AbstractAdvancedFormMixin(models.Model):
                     for condition in conditions:
                         del(condition['id'])
                         del(condition['type'])
-                        condition['field_name'] = clean_form_field_name(condition['value']['field_name'])
+                        condition_field_name = clean_form_field_name(condition['value']['field_name'])
+                        condition['field_name'] = condition_field_name
                         condition['rule'] = condition['value']['rule']
                         condition['value'] = condition['value'].get('value', None)
+                        condition['field_type'] = field_type_mapping[condition_field_name]
 
                     conditional_rules.append(rules)
 
@@ -327,6 +365,8 @@ class AbstractAdvancedFormMixin(models.Model):
                 default_value=field['value'].get('default_value', None),
                 empty_label=field['value'].get('empty_label', None),
                 max_length=field['value'].get('max_length', None),
+                maximum_date=field['value'].get('maximum_date', None),
+                minimum_date=field['value'].get('minimum_date', None),
                 display_side_by_side=field['value'].get('display_side_by_side', False),
                 display_checkbox_label=field['value'].get('display_checkbox_label', False),
                 html_value=html_value,
@@ -350,13 +390,11 @@ class AbstractAdvancedFormMixin(models.Model):
         template = self.get_template(request)
 
         if request.method == 'POST':
-
             form = self.get_form(request.POST, page=self, user=request.user)
 
             if form.is_valid():
                 self.process_form_submission(form)
                 return HttpResponseRedirect(self.url + '?thank=you')
-
         else:
 
             thanks = request.GET.get('thank', False)

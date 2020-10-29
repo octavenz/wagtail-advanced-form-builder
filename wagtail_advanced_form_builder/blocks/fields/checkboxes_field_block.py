@@ -30,6 +30,10 @@ class CheckboxesFieldBlock(BaseFieldBlock):
 
     display_checkbox_label = None
 
+    maximum_date = None
+
+    minimum_date = None
+
     class Meta:
         form_classname = 'waf--field'
         icon = 'extraicons--checkboxes'
