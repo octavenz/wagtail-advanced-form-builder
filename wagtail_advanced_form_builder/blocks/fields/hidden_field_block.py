@@ -8,6 +8,8 @@ class HiddenFieldBlock(BaseFieldBlock):
     default_value = blocks.CharBlock(
         max_length=255,
         required=True,
+        label='Value',
+        help_text='The value to go into the hidden field.'
     )
 
     choices = None
@@ -27,6 +29,8 @@ class HiddenFieldBlock(BaseFieldBlock):
     display_side_by_side = None
 
     placeholder = None
+
+    rules = None
 
     class Meta:
         form_classname = 'waf--field'

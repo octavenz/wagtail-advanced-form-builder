@@ -5,6 +5,19 @@ nav:
         - Installation: getting_started/installing.md
         - Out of the box: getting_started/out_of_the_box.md
         - Custom page models: getting_started/using_your_own_page_models.md
+    - Fields:
+        - Basic field: fields/basic_field.md
+        - Email field: fields/email_field.md
+        - URL field: fields/url_field.md
+        - Number field: fields/number_field.md
+        - Multiline field: fields/multi_line_field.md
+        - Hidden field: fields/hidden_field.md
+        - Dropdown field: fields/dropdown_field.md
+        - Radio field: fields/radio_field.md
+        - Checkboxes field: fields/checkboxes_field.md
+        - Checkbox field: fields/checkbox_field.md
+        - Multiselect field: fields/multi_select_field.md
+        - HTML field: fields/html_field.md
     - Contributing:
         - How to: contributing/contributing.md
 theme:
