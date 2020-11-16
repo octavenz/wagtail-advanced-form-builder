@@ -6,12 +6,12 @@
         {% include "wagtail_advanced_form_builder/field_helpers/field_label.html" %}
         {% include "wagtail_advanced_form_builder/field_helpers/field_help_text.html" %}
         <ul class="waf--radio-list">
-        {% for checkbox in field %}
-            <li class="">
-                {{ checkbox.tag }}
-                <label for="{{ checkbox.id_for_label }}" class="waf--field-label-choice">{{ checkbox.choice_label }}</label>
-            </li>
-        {% endfor %}
+            {% for checkbox in field %}
+                <li class="{% if field.field.widget.display_side_by_side %}waf--choice-inline{% endif %}">
+                    {{ checkbox.tag }}
+                    <label for="{{ checkbox.id_for_label }}" class="waf--field-label-choice">{{ checkbox.choice_label }}</label>
+                </li>
+            {% endfor %}
         </ul>
     </div>
     {% include "wagtail_advanced_form_builder/field_helpers/field_error.html" %}

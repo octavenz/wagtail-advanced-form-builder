@@ -15,7 +15,7 @@
     {% include "wagtail_advanced_form_builder/fields/checkbox_field.html" with field=field %}
 {% elif field|fieldtype == 'RadioSelect' or field|fieldtype == 'SideBySideRadioSelectWidget' %}
     {% include "wagtail_advanced_form_builder/fields/radio_buttons_field.html" with field=field %}
-{% elif field|fieldtype == 'CheckboxSelectMultiple' %}
+{% elif field|fieldtype == 'CheckboxSelectMultiple' or field|fieldtype == 'SideBySideCheckboxSelectWidget' %}
     {% include "wagtail_advanced_form_builder/fields/multi_checkbox_field.html" with field=field %}
 {% elif field|fieldtype == 'Textarea' %}
     {% include "wagtail_advanced_form_builder/fields/text_area_field.html" with field=field %}

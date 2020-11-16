@@ -3,6 +3,8 @@ from wagtail.contrib.forms.forms import FormBuilder
 
 from wagtail_advanced_form_builder.forms.widgets.checkbox_input_widget import CheckboxInput
 from wagtail_advanced_form_builder.forms.widgets.html_output_widget import HTMLOutputWidget
+from wagtail_advanced_form_builder.forms.widgets.side_by_side_checkbox_select_multiple_widget import \
+    SideBySideCheckboxSelectWidget
 from wagtail_advanced_form_builder.forms.widgets.side_by_side_radio_select_widget import SideBySideRadioSelectWidget
 
 
@@ -50,9 +52,15 @@ class AdvancedFormBuilder(FormBuilder):
             lambda x: (x.strip(), x.strip()),
             field.default_value
         ))
-        return forms.MultipleChoiceField(
-            widget=forms.CheckboxSelectMultiple, **options
-        )
+        print("HERE", field.display_side_by_side)
+        if field.display_side_by_side:
+            return forms.MultipleChoiceField(
+                widget=SideBySideCheckboxSelectWidget, **options
+            )
+        else:
+            return forms.MultipleChoiceField(
+                widget=forms.CheckboxSelectMultiple, **options
+            )
 
     def create_checkbox_field(self, field, options):
         options['widget'] = CheckboxInput(
