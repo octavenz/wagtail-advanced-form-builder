@@ -16,7 +16,7 @@ with io.open("README.md", encoding="utf-8") as fh:
 
 setup(
     name="wagtail-advanced-form-builder",
-    version="0.1.8",
+    version="0.1.9",
     description="Wagtail Advanced Form Builder",
     long_description=long_description,
     author="Richard Blake (Octave)",
@@ -36,6 +36,6 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    install_requires=["Django>=2.2,<3.2", "Wagtail>=2.7,<2.11", "wagtailextraicons"],
+    install_requires=["Django>=2.2", "Wagtail>=2.7", "wagtailextraicons"],
     zip_safe=False,
 )
