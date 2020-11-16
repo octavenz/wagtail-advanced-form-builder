@@ -52,7 +52,7 @@ class AdvancedFormBuilder(FormBuilder):
             lambda x: (x.strip(), x.strip()),
             field.default_value
         ))
-        print("HERE", field.display_side_by_side)
+
         if field.display_side_by_side:
             return forms.MultipleChoiceField(
                 widget=SideBySideCheckboxSelectWidget, **options
