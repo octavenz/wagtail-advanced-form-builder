@@ -1,0 +1,12 @@
+# Browsers that we support
+
+> 99%
+last 2 versions
+last 5 Chrome versions
+last 5 Firefox versions
+last 5 Edge versions
+last 5 Safari versions
+Firefox ESR
+not op_mini all
+not ie < 10
+not dead

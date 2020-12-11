@@ -7,6 +7,19 @@ const WebpackOnBuildPlugin = require('on-build-webpack');
 const entryPath = path.resolve(__dirname, 'wagtail_advanced_form_builder/static_src/wagtail_advanced_form_builder');
 const outputPath = path.resolve(__dirname, 'wagtail_advanced_form_builder/static/wagtail_advanced_form_builder');
 
+const configureBabelLoader = () => {
+    return {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+            'cache-loader',
+            {
+                loader: 'babel-loader',
+            },
+        ],
+    };
+};
+
 module.exports = {
   mode: 'production',
   entry: {
@@ -28,7 +41,8 @@ module.exports = {
           'css-loader',
           'sass-loader'
         ]
-      }
+      },
+      configureBabelLoader(),
     ]
   },
   plugins: [
