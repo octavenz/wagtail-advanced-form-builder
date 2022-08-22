@@ -16,7 +16,7 @@ with io.open("README.md", encoding="utf-8") as fh:
 
 setup(
     name="wagtail-advanced-form-builder",
-    version="0.2.3",
+    version="0.2.4",
     description="Wagtail Advanced Form Builder",
     long_description=long_description,
     author="Richard Blake (Octave)",
