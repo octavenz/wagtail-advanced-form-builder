@@ -18,12 +18,12 @@ This will give you a page setup that looks something like below with your Form c
 
 
         from django.db import models
-        from django.utils.translation import ugettext_lazy as _
+        from django.utils.translation import gettext_lazy as _
 
         from wagtail.admin.edit_handlers import TabbedInterface, ObjectList, StreamFieldPanel        
+        from wagtail.core import blocks            
         from wagtail.core.fields import StreamField
         from wagtail.core.models import Page    
-        from wagtail.core import blocks            
         
         from wagtail_advanced_form_builder.models.abstract_advanced_email_form import AbstractAdvancedEmailForm
         from wagtail_advanced_form_builder.models.abstract_advanced_form_field import AbstractAdvancedFormField

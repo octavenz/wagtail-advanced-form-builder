@@ -8,4 +8,3 @@ class EmailFormPage(AbstractAdvancedEmailForm):
     content_panels = Page.content_panels + AbstractAdvancedEmailForm.content_panels
 
     settings_panels = Page.settings_panels + AbstractAdvancedEmailForm.settings_panels
-
