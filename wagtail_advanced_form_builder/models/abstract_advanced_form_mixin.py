@@ -5,7 +5,11 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+else:
+    from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.rich_text import RichText
 
@@ -209,7 +213,7 @@ class AbstractAdvancedFormMixin(models.Model):
     )
 
     content_panels = [
-        StreamFieldPanel('form'),
+        FieldPanel('form') if WAGTAIL_VERSION >= (3, 0) else StreamFieldPanel('form'),
         FieldPanel('submit_button_text'),
         MultiFieldPanel(
             [
