@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.rich_text import RichText
 
@@ -209,7 +209,7 @@ class AbstractAdvancedFormMixin(models.Model):
     )
 
     content_panels = [
-        StreamFieldPanel('form'),
+        FieldPanel('form'),
         FieldPanel('submit_button_text'),
         MultiFieldPanel(
             [
