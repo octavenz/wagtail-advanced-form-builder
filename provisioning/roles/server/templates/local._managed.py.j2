@@ -10,7 +10,7 @@ DATABASES = {
 {# if more than one database is defined then you must specify db.name else Django will error #}
 {% for db in item.databases %}
     '{{ db.name | default('default') }}': {
-        'ENGINE': '{{ db.engine | default('django.db.backends.postgresql_psycopg2') }}',
+        'ENGINE': '{{ db.engine | default('django.db.backends.postgresql') }}',
         'NAME': '{{ db.db_name }}',
         'USER': '{{ db.user }}',
         'PASSWORD': '{{ db.password }}',

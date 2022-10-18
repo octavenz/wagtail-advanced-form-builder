@@ -1,4 +1,5 @@
 from django import forms
+
 from wagtail.contrib.forms.forms import FormBuilder
 
 from wagtail_advanced_form_builder.forms.widgets.checkbox_input_widget import CheckboxInput

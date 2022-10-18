@@ -1,4 +1,4 @@
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 FIELD_TYPE_SINGLE_LINE = 'singleline'
 FIELD_TYPE_MULTI_LINE = 'multiline'
