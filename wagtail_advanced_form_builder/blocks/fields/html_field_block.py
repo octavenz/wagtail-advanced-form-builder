@@ -1,5 +1,5 @@
-from wagtail.core import blocks
-from wagtail.core.blocks import RichTextBlock
+from wagtail import blocks
+from wagtail.blocks import RichTextBlock
 
 from .base_field_block import BaseFieldBlock
 

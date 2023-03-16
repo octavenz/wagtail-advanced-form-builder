@@ -1,4 +1,4 @@
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from wagtail_advanced_form_builder.models.abstract_advanced_form import AbstractAdvancedForm
 

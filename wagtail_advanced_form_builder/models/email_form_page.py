@@ -1,4 +1,4 @@
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from .abstract_advanced_email_form import AbstractAdvancedEmailForm
 
