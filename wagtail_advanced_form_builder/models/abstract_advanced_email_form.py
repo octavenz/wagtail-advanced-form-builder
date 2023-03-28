@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.edit_handlers import MultiFieldPanel, FieldRowPanel, FieldPanel
+from wagtail.admin.panels import MultiFieldPanel, FieldRowPanel, FieldPanel
 from wagtail.contrib.forms.models import AbstractEmailForm
 
 from .abstract_advanced_form_mixin import AbstractAdvancedFormMixin

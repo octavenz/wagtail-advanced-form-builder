@@ -1,6 +1,6 @@
 import wagtail_advanced_form_builder.constants as consts
 
-from wagtail.core import blocks
+from wagtail import blocks
 
 
 class ConditionBlock(blocks.StructBlock):

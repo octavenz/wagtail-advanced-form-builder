@@ -36,7 +36,7 @@ class AdvancedFormBuilder(FormBuilder):
 
     def create_dropdown_field(self, field, options):
         options['choices'] = list(map(
-            lambda x: (x.strip(), x.strip()),
+            lambda x: (x.get('value', '').strip(), x.get('value', '').strip()),
             field.choices
         ))
         if field.empty_label:
@@ -46,11 +46,12 @@ class AdvancedFormBuilder(FormBuilder):
 
     def create_checkboxes_field(self, field, options):
         options['choices'] = list(map(
-            lambda x: (x.strip(), x.strip()),
+            lambda x: (x.get('value', '').strip(), x.get('value', '').strip()),
             field.choices
         ))
+
         options['initial'] = list(map(
-            lambda x: (x.strip(), x.strip()),
+            lambda x: x.get('value', '').strip(),
             field.default_value
         ))
 

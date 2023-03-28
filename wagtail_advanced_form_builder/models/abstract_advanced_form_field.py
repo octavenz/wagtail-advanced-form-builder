@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from modelcluster.models import ClusterableModel
 
 from wagtail.contrib.forms.models import AbstractFormField
-from wagtail.core.fields import RichTextField
+from wagtail.fields import RichTextField
 
 import wagtail_advanced_form_builder.constants as consts
 from wagtail_advanced_form_builder.utils import clean_form_field_name
