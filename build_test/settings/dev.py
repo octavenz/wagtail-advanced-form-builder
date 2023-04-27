@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'http://localhost:8019'
+WAGTAILADMIN_BASE_URL = 'http://localhost:8020'
 
 # Django base settings.
 # https://docs.djangoproject.com/en/2.2/ref/settings/

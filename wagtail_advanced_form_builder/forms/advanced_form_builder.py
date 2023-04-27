@@ -45,6 +45,7 @@ class AdvancedFormBuilder(FormBuilder):
         return forms.ChoiceField(**options)
 
     def create_checkboxes_field(self, field, options):
+        print("FUCK YOU", field.choices)
         options['choices'] = list(map(
             lambda x: (x.strip(), x.strip()),
             field.choices

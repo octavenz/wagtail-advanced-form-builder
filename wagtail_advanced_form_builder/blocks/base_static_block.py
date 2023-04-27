@@ -1,6 +1,6 @@
 from django.template.loader import render_to_string
 
-from wagtail.core import blocks
+from wagtail import blocks
 
 
 class BaseStaticBlock(blocks.StaticBlock):

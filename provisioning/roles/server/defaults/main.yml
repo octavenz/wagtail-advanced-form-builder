@@ -1,5 +1,5 @@
 ---
-postgres_version: 10
+postgres_version: 14
 postgresql_python_library: python3-psycopg2
 postgres_dbs: []
 

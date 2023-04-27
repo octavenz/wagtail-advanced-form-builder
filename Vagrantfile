@@ -3,9 +3,9 @@
 
 Vagrant.configure(2) do |config|
 
-  config.vm.box = "ubuntu/bionic64"
+  config.vm.box = "ubuntu/focal64"
 
-  config.vm.network "forwarded_port", guest: 8000, host: 8019
+  config.vm.network "forwarded_port", guest: 8000, host: 8020
   config.vm.network "forwarded_port", guest: 1080, host: 1080, auto_correct: true
 
   config.vm.network "private_network", ip: "192.168.20.20"

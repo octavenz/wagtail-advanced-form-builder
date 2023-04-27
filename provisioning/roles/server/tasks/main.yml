@@ -9,6 +9,10 @@
     update_cache: yes
     cache_valid_time: 86400
 
+- name: Install ACL
+  apt:
+    name: acl
+
 - name: Add PostgreSQL APT repository key
   apt_key:
     id: ACCC4CF8
@@ -161,21 +165,21 @@
     - "{{ django }}"
     - databases
 
-- name: Add Ruby repositories
-  apt_repository: repo=ppa:brightbox/ruby-ng
-
-- name: Install MailCatcher Dependencies
-  apt:
-    name: "{{ item }}"
-    state: "{{ apt_install_state | default('latest') }}"
-    update_cache: true
-    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
-  with_items: "{{ mailcatcher_dependencies }}"
-
-- name: Install MailCatcher
-  gem:
-    name: mailcatcher
-    state: latest
-    user_install: false
-    executable: "/usr/bin/gem2.{{ mailcatcher_ruby_minor_version }}"
-  when: "mailcatcher_version == 'latest'"
+#- name: Add Ruby repositories
+#  apt_repository: repo=ppa:brightbox/ruby-ng
+#
+#- name: Install MailCatcher Dependencies
+#  apt:
+#    name: "{{ item }}"
+#    state: "{{ apt_install_state | default('latest') }}"
+#    update_cache: true
+#    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+#  with_items: "{{ mailcatcher_dependencies }}"
+#
+#- name: Install MailCatcher
+#  gem:
+#    name: mailcatcher
+#    state: latest
+#    user_install: false
+#    executable: "/usr/bin/gem2.{{ mailcatcher_ruby_minor_version }}"
+#  when: "mailcatcher_version == 'latest'"

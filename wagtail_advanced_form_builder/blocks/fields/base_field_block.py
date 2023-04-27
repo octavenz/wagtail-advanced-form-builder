@@ -1,9 +1,7 @@
 from django import forms
 from django.templatetags.static import static
 
-from wagtail.core import blocks
-from wagtail.core.blocks import RichTextBlock
-
+from wagtail import blocks
 from .conditional_block import ConditionalBlock
 
 
@@ -61,7 +59,7 @@ class BaseFieldBlock(blocks.StructBlock):
         help_text='Text to assist the user in populating this field.'
     )
 
-    html = RichTextBlock(
+    html = blocks.RichTextBlock(
         required=False,
     )
 
