@@ -4,9 +4,8 @@ from django.core.mail.backends.smtp import EmailBackend as DjangoEmailBackend
 
 class DevEmailBackend:
     """
-        Custom mail backend that uses MailCatcher but falls back to console if
-        MailCatcher server is not running.
-        Your dev settings should include the following to work with MailCatcher.
+        Custom mail backend that uses a mail service on port 1025 but falls back to console if
+        that service is not running.
         EMAIL_HOST = '127.0.0.1'
         EMAIL_PORT = 1025
     """

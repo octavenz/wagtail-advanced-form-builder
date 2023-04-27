@@ -2,7 +2,7 @@
 import io
 
 from setuptools import setup, find_packages
-
+from wagtail_advanced_form_builder import __version__
 # Hack to prevent "TypeError: 'NoneType' object is not callable" error
 # in multiprocessing/util.py _exit_function when setup.py exits
 # (see http://www.eby-sarna.com/pipermail/peak/2010-May/003357.html)
@@ -16,7 +16,7 @@ with io.open("README.md", encoding="utf-8") as fh:
 
 setup(
     name="wagtail-advanced-form-builder",
-    version="0.2.4",
+    version=__version__,
     description="Wagtail Advanced Form Builder",
     long_description=long_description,
     author="Richard Blake (Octave)",
@@ -35,7 +35,8 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Framework :: Wagtail :: 4"
     ],
-    install_requires=["Django>=2.2", "Wagtail>=2.7", "wagtailextraicons"],
+    install_requires=["Django>=3.2", "Wagtail>=4", "wagtailextraicons"],
     zip_safe=False,
 )
