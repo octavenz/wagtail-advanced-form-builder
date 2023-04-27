@@ -50,10 +50,9 @@ class AdvancedFormBuilder(FormBuilder):
             field.choices
         ))
         options['initial'] = list(map(
-            lambda x: (x.get('value', '').strip(), x.get('value', '').strip()),
+            lambda x: x.get('value', '').strip(),
             field.default_value
         ))
-
         if field.display_side_by_side:
             return forms.MultipleChoiceField(
                 widget=SideBySideCheckboxSelectWidget, **options
