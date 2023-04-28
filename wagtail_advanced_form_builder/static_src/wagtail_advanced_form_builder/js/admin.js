@@ -18,8 +18,6 @@ class FieldRegistry {
     constructor() {
         this.registeredFieldNames = [];
         this.fields = $('.waf--field');
-        this.formRulesContainers = $('.waf--form-rules');
-        this.uniqueFieldCounter = 0;
     }
 
     swapRulesInputsForSelectDropdowns() {
@@ -37,7 +35,7 @@ class FieldRegistry {
                     .val();
 
                 // Find any HTML field blocks to exclude from dropdown
-                const htmlFieldBlocks = $ruleContainer.parents('#form-list').first().find('.waf--html-field');
+                const htmlFieldBlocks = $('.waf--html-field');
                 const htmlFieldNames = [];
                 htmlFieldBlocks.each((i, htmlElement) => {
                     htmlFieldNames.push($(htmlElement).find('input[type="text"]').first().val());
@@ -80,12 +78,7 @@ class FieldRegistry {
     toggleRulesContainers() {
         this.formRulesContainers = $('.waf--form-rules');
         if (this.registeredFieldNames.length > 1) {
-            this.formRulesContainers.show();
-            this.formRulesContainers.siblings('label').show();
             this.swapRulesInputsForSelectDropdowns();
-        } else {
-            this.formRulesContainers.hide();
-            this.formRulesContainers.siblings('label').hide();
         }
     }
 
@@ -99,10 +92,7 @@ class FieldRegistry {
             const $field = $(element);
 
             // Determine the parent streamfield container for this field
-            let $fieldParentContainer = $field.parents('div[id^="form-"][id$="-container"]').first();
-            if (!$fieldParentContainer.length) {
-                $fieldParentContainer = $field.parents('div[id^="field-list"]').first();
-            }
+            let $fieldParentContainer = $field.parents('section').first().parent('div');
 
             // Determine if this Streamfield has been deleted already
             const isDeleted = $fieldParentContainer.find('input[type="hidden"][id$="-deleted"]').first();
@@ -125,60 +115,6 @@ class FieldRegistry {
         this.toggleRulesContainers();
 
     }
-
-    initField($field) {
-        const $fieldParentContainer = $field.parents('.c-sf-container__block-container').first();
-        const $childFields = $field.find('> .field');
-        const $headerBar = $fieldParentContainer.find('.c-sf-block__header');
-        if (!$fieldParentContainer.find('[data-expand-trigger]').length) {
-            $field.attr('id', `field-list-${ this.uniqueFieldCounter }`);
-            let hasHiddenFields = false;
-            $childFields.each((index, childField) => {
-                if (index > 0) {
-                    const $childField = $(childField);
-                    const inError = $childField.find('div.error');
-                    if (!inError.length) {
-                        $childField.hide();
-                        hasHiddenFields = true;
-                    }
-                }
-            });
-            $(`<a href="#" data-expand-trigger="field-list-${ this.uniqueFieldCounter }">${ hasHiddenFields ? 'Configure field' : 'Collapse field' }</a>`).insertBefore($headerBar.find('h3').first());
-            this.uniqueFieldCounter += 1;
-        }
-    }
-
-    initFieldDisplay() {
-        this.fields.each((i, field) => {
-            this.initField($(field));
-        });
-    }
-
-    initExpandTrigger($trigger) {
-        const fieldsListId = $trigger.attr('data-expand-trigger');
-        const fieldsContainer = $(`#${ fieldsListId }`);
-        const fields = fieldsContainer.find('> .field');
-        if ($trigger.html() === 'Collapse field') {
-            fields.each(function (i) {
-                if (i > 0) {
-                    $(this).hide();
-                }
-            });
-            $trigger.html('Configure field');
-        } else {
-            fields.each(function () {
-                $(this).show();
-            });
-            $trigger.html('Collapse field');
-        }
-    }
-    initExpandTriggers() {
-        this.expandTriggers = $('[data-expand-trigger]');
-        this.expandTriggers.on('click', (event) => {
-            event.preventDefault();
-            this.initExpandTrigger($(event.currentTarget));
-        });
-    }
 }
 
 class FormBuilder {
@@ -190,8 +126,8 @@ class FormBuilder {
             characterData: true,
             subTree: true,
         };
-        this.streamfieldList = $('#form-list')[0];
-        this.formRulesLists = $('[id$=-rules-conditions-list]');
+        this.streamfieldList = $('.waf--field').first().parents('[data-streamfield-stream-container]')[0];
+        this.formRulesLists = $('[data-contentpath="conditions"]').find('[data-streamfield-stream-container]');
     }
 
     monitorMutations() {
@@ -202,18 +138,7 @@ class FormBuilder {
                 if (newNodes !== null) { // If there are new nodes added
                     this.fieldRegistry.registerFieldNames();
                     const $nodes = $(newNodes); // jQuery set
-                    $nodes.each((index, node) => {
-                        const $node = $(node);
-                        this.fieldRegistry.initField($node);
-                        const expandNodes = $nodes.find('[data-expand-trigger]');
-                        expandNodes.unbind('click');
-                        expandNodes.on('click', (event) => {
-                            event.preventDefault();
-                            this.fieldRegistry.initExpandTrigger($(event.currentTarget));
-                        });
-                    });
-
-                    $nodes.find('[id$=-rules-conditions-list]').each((index, element) => {
+                    $nodes.find('[data-contentpath="conditions"]').find('[data-streamfield-stream-container]').each((index, element) => {
                         this.newRuleMutationObserver.observe(element, this.mutationObserverConfig);
                     });
                 }
@@ -236,7 +161,7 @@ class FormBuilder {
         });
 
         // Reregister field names when delete buttons are clicked on streamfield
-        $(this.streamfieldList).find('[id^="form-"][id$="-delete"]').on('click', (event) => {
+        $(this.streamfieldList).find('.button[title="Delete"]').on('click', (event) => {
             this.fieldRegistry.registerFieldNames();
         });
 
@@ -245,8 +170,6 @@ class FormBuilder {
     init() {
         this.fieldRegistry = new FieldRegistry();
         this.fieldRegistry.registerFieldNames();
-        this.fieldRegistry.initFieldDisplay();
-        this.fieldRegistry.initExpandTriggers();
         this.monitorMutations();
 
     }

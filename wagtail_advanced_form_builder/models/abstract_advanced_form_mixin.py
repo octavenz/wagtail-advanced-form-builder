@@ -10,8 +10,8 @@ if WAGTAIL_VERSION >= (3, 0):
     from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 else:
     from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core.rich_text import RichText
+from wagtail.fields import RichTextField, StreamField
+from wagtail.rich_text import RichText
 
 from wagtail_advanced_form_builder.blocks.fields import SingleLineFieldBlock
 from wagtail_advanced_form_builder.forms import AdvancedFormBuilder
@@ -181,7 +181,8 @@ class AbstractAdvancedFormMixin(models.Model):
         default=None,
         null=True,
         blank=False,
-        help_text=_('Add fields to the form')
+        help_text=_('Add fields to the form'),
+        use_json_field=True,
     )
 
     thanks_page_title = models.CharField(
@@ -340,6 +341,18 @@ class AbstractAdvancedFormMixin(models.Model):
             fields.append(form_field)
 
         return fields
+
+    def get_preview_context(self, request, mode_name):
+        """
+        Returns a context dictionary for use in templates for previewing this object.
+        """
+        context = super().get_preview_context(request, mode_name)
+        form = self.get_form(page=self, user=request.user)
+        context['form'] = form
+        if form:
+            context['conditional_rules'] = json.dumps(form.conditional_rules)
+
+        return context
 
     def serve(self, request, *args, **kwargs):
         """

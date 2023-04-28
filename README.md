@@ -2,6 +2,19 @@
 
 ![Form fields](./docs/screenshots/waf-form-fields.png)
 
+# Versions
+
+This package supports Wagtail 2 and 4. There is currently no support for Wagtail 3.
+
+### Version 1.X.X
+
+Is for use with Wagtail version 4.X.X
+
+### Version 0.X.X
+
+Is for use with Wagtail version 2.X.X
+
+
 # About
 
 Wagtail Advanced Form Builder is an extension on top of Wagtail's in-built Form Builder. It provides the ability to 

@@ -1,9 +1,4 @@
-from django import forms
-from django.templatetags.static import static
-
-from wagtail.core import blocks
-from wagtail.core.blocks import RichTextBlock
-
+from wagtail import blocks
 from .conditional_block import ConditionalBlock
 
 
@@ -61,7 +56,7 @@ class BaseFieldBlock(blocks.StructBlock):
         help_text='Text to assist the user in populating this field.'
     )
 
-    html = RichTextBlock(
+    html = blocks.RichTextBlock(
         required=False,
     )
 
@@ -74,7 +69,3 @@ class BaseFieldBlock(blocks.StructBlock):
         required=False,
         help_text='Add conditional rules to show or hide fields depending on the value of other fields in the form.'
     )
-
-    @property
-    def media(self):
-        return forms.Media(js=[static('wagtail_advanced_form_builder/js/admin.js')])

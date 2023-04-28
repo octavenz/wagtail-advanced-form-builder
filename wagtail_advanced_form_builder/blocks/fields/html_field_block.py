@@ -1,5 +1,4 @@
-from wagtail.core import blocks
-from wagtail.core.blocks import RichTextBlock
+from wagtail import blocks
 
 from .base_field_block import BaseFieldBlock
 
@@ -13,7 +12,7 @@ class HTMLFieldBlock(BaseFieldBlock):
         label='Unique reference name',
     )
 
-    html = RichTextBlock(
+    html = blocks.RichTextBlock(
         required=True,
     )
 
