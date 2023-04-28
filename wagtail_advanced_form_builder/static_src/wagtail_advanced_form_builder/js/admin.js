@@ -126,7 +126,16 @@ class FormBuilder {
             characterData: true,
             subTree: true,
         };
-        this.streamfieldList = $('.waf--field').first().parents('[data-streamfield-stream-container]')[0];
+
+        // Fetch the streamfield field containers so mutation observers can be attached.
+        this.streamfieldList = $('.waf--field').first().parents('[data-streamfield-stream-container]');
+
+        // Handles the case where there aren't any waf--fields on the form page yet.
+        if (!this.streamfieldList.length) {
+            this.streamfieldList = $('[data-streamfield-stream-container]');
+        }
+
+        // Fetch any existing conditions blocks on existing fields so mutation observers can be attached to them.
         this.formRulesLists = $('[data-contentpath="conditions"]').find('[data-streamfield-stream-container]');
     }
 
@@ -145,7 +154,9 @@ class FormBuilder {
             });
         }));
 
-        this.newFieldMutationObserver.observe(this.streamfieldList, this.mutationObserverConfig);
+        this.streamfieldList.each((index, element) => {
+            this.newFieldMutationObserver.observe(element, this.mutationObserverConfig);
+        });
 
         this.newRuleMutationObserver = new MutationObserver(((mutations) => {
             mutations.forEach((mutation) => {
