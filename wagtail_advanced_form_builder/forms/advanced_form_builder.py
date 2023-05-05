@@ -49,6 +49,7 @@ class AdvancedFormBuilder(FormBuilder):
             lambda x: (x.get('value', '').strip(), x.get('value', '').strip()),
             field.choices
         ))
+
         options['initial'] = list(map(
             lambda x: x.get('value', '').strip(),
             field.default_value
