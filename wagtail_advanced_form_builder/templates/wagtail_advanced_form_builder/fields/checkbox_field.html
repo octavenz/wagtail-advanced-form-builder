@@ -2,18 +2,16 @@
         class="waf--field-container {% if field.errors %}waf--field-container--error{% endif %}"
         data-waf-field
 >
-    <div class="">
+    <div class="waf--checkbox-container">
+        {{ field }}
         {% if  field.field.widget.display_checkbox_label %}
-            {% include "wagtail_advanced_form_builder/field_helpers/field_label.html" %}
+        <label class="waf--field-label-choice" for="{{ field.id_for_label }}">
+            {{ field.label }}
+        </label>
         {% endif %}
-        <div class="waf--checkbox-container">
-            {{ field }}
-            <label class="waf--field-label-choice" for="{{ field.id_for_label }}">
-                {% if field.help_text %}
-                    {% include "wagtail_advanced_form_builder/field_helpers/field_help_text.html" %}
-                {% endif %}
-            </label>
-        </div>
     </div>
+    {% if field.help_text %}
+        {% include "wagtail_advanced_form_builder/field_helpers/field_help_text.html" %}
+    {% endif %}
     {% include "wagtail_advanced_form_builder/field_helpers/field_error.html" %}
 </div>
