@@ -72,10 +72,9 @@ class AdvancedFormBuilder(FormBuilder):
 
 
     def create_radio_field(self, field, options):
-
         options['choices'] = list(map(
             lambda x: (x.strip(), x.strip()),
-            field.choices
+            map(lambda x: x['value'] if type(x) is dict else x, field.choices)
         ))
 
         if field.display_side_by_side:
@@ -87,7 +86,7 @@ class AdvancedFormBuilder(FormBuilder):
     def create_multiselect_field(self, field, options):
         options['choices'] = list(map(
             lambda x: (x.strip(), x.strip()),
-            field.choices
+            map(lambda x: x['value'] if type(x) is dict else x, field.choices)
         ))
         return forms.MultipleChoiceField(**options)
 
