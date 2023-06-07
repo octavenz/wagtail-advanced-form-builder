@@ -317,21 +317,29 @@ class AbstractAdvancedFormMixin(models.Model):
                 conditions = rules.get('conditions', None)
                 if len(conditions):
                     rule_action = rules.get('action')
-
-            form_field = self.form_field(
-                field_type=field['type'],
-                label=field['value']['label'],
-                required=field['value'].get('required', False),
-                choices=field['value'].get('choices', None),
-                help_text=field['value'].get('help_text', None),
-                default_value=field['value'].get('default_value', None),
-                empty_label=field['value'].get('empty_label', None),
-                max_length=field['value'].get('max_length', None),
-                display_side_by_side=field['value'].get('display_side_by_side', False),
-                display_checkbox_label=field['value'].get('display_checkbox_label', False),
-                html_value=html_value,
-                rule_action=rule_action,
-            )
+            
+            if field['type'] == 'form_snippet':
+                form_field = self.form_field(
+                    field_type=field['type'],
+                    label='Form Snippet',
+                    rule_action=rule_action,
+                    page_id=field['value']['form']
+                )
+            else:
+                form_field = self.form_field(
+                    field_type=field['type'],
+                    label=field['value']['label'],
+                    required=field['value'].get('required', False),
+                    choices=field['value'].get('choices', None),
+                    help_text=field['value'].get('help_text', None),
+                    default_value=field['value'].get('default_value', None),
+                    empty_label=field['value'].get('empty_label', None),
+                    max_length=field['value'].get('max_length', None),
+                    display_side_by_side=field['value'].get('display_side_by_side', False),
+                    display_checkbox_label=field['value'].get('display_checkbox_label', False),
+                    html_value=html_value,
+                    rule_action=rule_action,
+                )
 
             fields.append(form_field)
 
