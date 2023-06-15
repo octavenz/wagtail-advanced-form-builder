@@ -105,11 +105,16 @@ def conditions_passed(condition_rule, condition_value, condition_field_value):
             return False
 
     if condition_rule == consts.FIELD_RULE_STARTS_WITH:
-        if not condition_field_value.startsWith(condition_value):
+        print('')
+        print('-- condition_field_value --')
+        print(condition_field_value)
+        print('--')
+        print('')
+        if not condition_field_value.startswith(condition_value):
             return False
 
     if condition_rule == consts.FIELD_RULE_ENDS_WITH:
-        if not condition_field_value.endsWith(condition_value):
+        if not condition_field_value.endswith(condition_value):
             return False
 
     return True
