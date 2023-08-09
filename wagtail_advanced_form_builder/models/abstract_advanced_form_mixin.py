@@ -182,7 +182,8 @@ class AbstractAdvancedFormMixin(models.Model):
         default=None,
         null=True,
         blank=False,
-        help_text=_('Add fields to the form')
+        help_text=_('Add fields to the form'),
+        use_json_field=True,
     )
 
     thanks_page_title = models.CharField(
