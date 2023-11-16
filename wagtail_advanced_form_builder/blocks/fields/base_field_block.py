@@ -39,6 +39,10 @@ class BaseFieldBlock(blocks.StructBlock):
         required=False, help_text="Set a maximum length for this field. e.g. 100"
     )
 
+    min_length = blocks.IntegerBlock(
+        required=False, help_text="Set a minimum length for this field. e.g. 2"
+    )
+
     default_value = blocks.CharBlock(
         max_length=255, required=False, help_text="Set a default value for this field."
     )

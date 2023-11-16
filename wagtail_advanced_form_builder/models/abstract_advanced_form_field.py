@@ -63,6 +63,13 @@ class AbstractAdvancedFormField(AbstractFormField, ClusterableModel):
         blank=True,
     )
 
+    # Set a minimum length on fields
+    min_length = models.IntegerField(
+        default=None,
+        null=True,
+        blank=True,
+    )
+
     # Empty label option for choice fields only
     empty_label = models.CharField(
         max_length=255,

@@ -2,7 +2,6 @@ from .base_field_block import BaseFieldBlock
 
 
 class NumberFieldBlock(BaseFieldBlock):
-
     choices = None
 
     html = None
@@ -16,7 +15,8 @@ class NumberFieldBlock(BaseFieldBlock):
     placeholder = None
 
     max_length = None
+    min_length = None
 
     class Meta:
-        form_classname = 'waf--field'
-        icon = 'extraicons--number'
+        form_classname = "waf--field"
+        icon = "extraicons--number"

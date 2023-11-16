@@ -16,16 +16,25 @@ class AdvancedFormBuilder(FormBuilder):
             options['max_length'] = field.max_length
         else:
             options['max_length'] = 255
+        if field.min_length:
+            options['min_length'] = field.min_length
+            
         return forms.CharField(**options)
 
     def create_email_field(self, field, options):
         if field.max_length:
             options['max_length'] = field.max_length
+        if field.min_length:
+            options['min_length'] = field.min_length
+
         return forms.EmailField(**options)
 
     def create_url_field(self, field, options):
         if field.max_length:
             options['max_length'] = field.max_length
+        if field.min_length:
+            options['min_length'] = field.min_length
+
         return forms.URLField(**options)
 
     def create_html_field(self, field, options):

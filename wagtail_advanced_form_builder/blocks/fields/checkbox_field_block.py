@@ -4,7 +4,6 @@ from .base_field_block import BaseFieldBlock
 
 
 class CheckboxFieldBlock(BaseFieldBlock):
-
     choices = None
 
     help_text = blocks.CharBlock(
@@ -21,11 +20,10 @@ class CheckboxFieldBlock(BaseFieldBlock):
     empty_label = None
 
     max_length = None
+    min_length = None
 
     placeholder = None
 
-
     class Meta:
-
-        form_classname = 'waf--field'
-        icon = 'extraicons--checkbox'
+        form_classname = "waf--field"
+        icon = "extraicons--checkbox"

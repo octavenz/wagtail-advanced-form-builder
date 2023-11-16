@@ -5,12 +5,11 @@ from .base_field_block import BaseFieldBlock
 
 
 class HTMLFieldBlock(BaseFieldBlock):
-
     label = blocks.CharBlock(
         max_length=255,
         required=True,
-        help_text='A unique reference for this html block',
-        label='Unique reference name',
+        help_text="A unique reference for this html block",
+        label="Unique reference name",
     )
 
     html = RichTextBlock(
@@ -20,6 +19,7 @@ class HTMLFieldBlock(BaseFieldBlock):
     help_text = None
 
     max_length = None
+    min_length = None
 
     required = None
 
@@ -36,7 +36,5 @@ class HTMLFieldBlock(BaseFieldBlock):
     display_checkbox_label = None
 
     class Meta:
-        form_classname = 'waf--field waf--html-field'
-        icon = 'extraicons--paragraph'
-
-
+        form_classname = "waf--field waf--html-field"
+        icon = "extraicons--paragraph"

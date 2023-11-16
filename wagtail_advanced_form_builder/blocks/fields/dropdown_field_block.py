@@ -4,17 +4,17 @@ from .base_field_block import BaseFieldBlock
 
 
 class DropdownFieldBlock(BaseFieldBlock):
-
     choices = blocks.ListBlock(
         blocks.TextBlock(
             required=True,
-            icon='extraicons--heading-icon',
+            icon="extraicons--heading-icon",
         ),
     )
 
     html = None
 
     max_length = None
+    min_length = None
 
     placeholder = None
 
@@ -23,5 +23,5 @@ class DropdownFieldBlock(BaseFieldBlock):
     display_checkbox_label = None
 
     class Meta:
-        form_classname = 'waf--field'
-        icon = 'extraicons--dropdown'
+        form_classname = "waf--field"
+        icon = "extraicons--dropdown"

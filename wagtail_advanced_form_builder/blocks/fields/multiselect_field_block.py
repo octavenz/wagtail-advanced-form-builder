@@ -4,11 +4,10 @@ from .base_field_block import BaseFieldBlock
 
 
 class MultiSelectFieldBlock(BaseFieldBlock):
-
     choices = blocks.ListBlock(
         blocks.TextBlock(
             required=True,
-            icon='extraicons--heading-icon',
+            icon="extraicons--heading-icon",
         ),
     )
 
@@ -21,9 +20,10 @@ class MultiSelectFieldBlock(BaseFieldBlock):
     empty_label = None
 
     max_length = None
+    min_length = None
 
     display_side_by_side = None
 
     class Meta:
-        form_classname = 'waf--field'
-        icon = 'extraicons--multi-select'
+        form_classname = "waf--field"
+        icon = "extraicons--multi-select"

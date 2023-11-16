@@ -341,6 +341,7 @@ class AbstractAdvancedFormMixin(models.Model):
                     default_value=field['value'].get('default_value', None),
                     empty_label=field['value'].get('empty_label', None),
                     max_length=field['value'].get('max_length', None),
+                    min_length=field['value'].get('min_length', None),
                     display_side_by_side=field['value'].get('display_side_by_side', False),
                     display_checkbox_label=field['value'].get('display_checkbox_label', False),
                     html_value=html_value,
