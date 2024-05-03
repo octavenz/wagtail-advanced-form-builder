@@ -17,6 +17,7 @@ FIELD_TYPE_HTML = "html"
 FIELD_TYPE_CURRENCY = "currency"
 FIELD_TYPE_SIMPLE_DATE = "simpledate"
 FIELD_TYPE_PHONE = "phone"
+FIELD_TYPE_FIELD_TOGGLE = "field_toggle"
 
 FIELD_RULE_IS = "is"
 FIELD_RULE_IS_NOT = "is_not"

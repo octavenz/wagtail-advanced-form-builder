@@ -6,7 +6,6 @@
 {#{% if DEBUG %}#}
 {#    {{ field|fieldtype  }}#}
 {#{% endif %}#}
-
 {% if field|fieldtype == 'HTMLOutputWidget' %}
     {{ field }}
 {% elif field|fieldtype == 'HiddenInput' %}
@@ -19,6 +18,8 @@
     {% include "wagtail_advanced_form_builder/fields/multi_checkbox_field.html" with field=field %}
 {% elif field|fieldtype == 'Textarea' %}
     {% include "wagtail_advanced_form_builder/fields/text_area_field.html" with field=field %}
+{% elif field|fieldtype == 'FieldToggleInput' %}
+    {% include "wagtail_advanced_form_builder/fields/field_toggle.html" with field=field %}
 {% else %}
     {% include "wagtail_advanced_form_builder/fields/default_field.html" with field=field %}
 {% endif %}

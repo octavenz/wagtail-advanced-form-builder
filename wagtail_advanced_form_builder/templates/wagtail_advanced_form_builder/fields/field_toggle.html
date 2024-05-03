@@ -1,0 +1,12 @@
+<div
+        class="waf--field-container {% if field.errors %}waf--field-container--error{% endif %}"
+        data-waf-field
+>
+    <div class="waf--checkbox-container">
+        {{ field }}
+    </div>
+    {% if field.help_text %}
+        {% include "wagtail_advanced_form_builder/field_helpers/field_help_text.html" %}
+    {% endif %}
+    {% include "wagtail_advanced_form_builder/field_helpers/field_error.html" %}
+</div>

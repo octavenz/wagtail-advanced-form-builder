@@ -1,8 +1,12 @@
 from django import forms
+
 from wagtail.contrib.forms.forms import FormBuilder
 
 from wagtail_advanced_form_builder.forms.widgets.checkbox_input_widget import (
     CheckboxInput,
+)
+from wagtail_advanced_form_builder.forms.widgets.field_toggle_widget import (
+    FieldToggleInput,
 )
 from wagtail_advanced_form_builder.forms.widgets.html_output_widget import (
     HTMLOutputWidget,
@@ -108,3 +112,10 @@ class AdvancedFormBuilder(FormBuilder):
             )
         )
         return forms.MultipleChoiceField(**options)
+
+    def create_field_toggle_field(self, field, options):
+        options["widget"] = FieldToggleInput(
+            attrs={"data-toggled-label": field.toggled_label, "data-label": field.label}
+        )
+        field_toggle = forms.BooleanField(**options)
+        return field_toggle
