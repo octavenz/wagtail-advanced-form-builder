@@ -4,6 +4,7 @@ from wagtail import blocks
 
 from .condition_block import ConditionBlock
 from .blank_condition_block import BlankConditionBlock
+from ...forms.widgets.custom_select import CustomSelect
 
 
 class ConditionalBlock(blocks.StructBlock):
@@ -13,6 +14,7 @@ class ConditionalBlock(blocks.StructBlock):
         default=consts.FIELD_ACTION_SHOW,
         help_text='What conditional action would you like to perform on this field?',
         required=True,
+        widget=CustomSelect,
     )
 
     conditions = blocks.StreamBlock(

@@ -1,6 +1,7 @@
-import wagtail_advanced_form_builder.constants as consts
-
 from wagtail import blocks
+
+from wagtail_advanced_form_builder.forms.widgets.custom_select import CustomSelect
+import wagtail_advanced_form_builder.constants as consts
 
 
 class ConditionBlock(blocks.StructBlock):
@@ -14,6 +15,7 @@ class ConditionBlock(blocks.StructBlock):
     rule = blocks.ChoiceBlock(
         choices=consts.FIELD_RULE_CHOICES,
         default=consts.FIELD_RULE_IS,
+        widget=CustomSelect,
     )
 
     value = blocks.CharBlock(
@@ -25,4 +27,3 @@ class ConditionBlock(blocks.StructBlock):
     class Meta:
         icon = 'cog'
         form_classname = 'waf--rule-condition'
-
