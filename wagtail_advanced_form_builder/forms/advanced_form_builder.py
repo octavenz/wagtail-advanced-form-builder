@@ -41,7 +41,6 @@ class AdvancedFormBuilder(FormBuilder):
         if field.empty_label:
             options['choices'] = [('', field.empty_label)] + options['choices']
 
-        options["required"] = field.required
         return forms.ChoiceField(**options)
 
     def create_checkboxes_field(self, field, options):
