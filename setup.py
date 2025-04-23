@@ -32,8 +32,8 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Framework :: Wagtail :: 4"
+        "Framework :: Wagtail :: 6"
     ],
-    install_requires=["Django>=3.2", "Wagtail>=4", "wagtailextraicons"],
+    install_requires=["Django>=4.2", "Wagtail>=6", "wagtailextraicons"],
     zip_safe=False,
 )

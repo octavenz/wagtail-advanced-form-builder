@@ -1,5 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 
+FORM_PAGE = 'form_page'
+EMAIL_FORM_PAGE = 'email_form_page'
+
 FIELD_TYPE_SINGLE_LINE = 'singleline'
 FIELD_TYPE_MULTI_LINE = 'multiline'
 FIELD_TYPE_EMAIL = 'email'

@@ -197,7 +197,8 @@ class AbstractAdvancedFormMixin(models.Model):
         default=None,
         null=True,
         blank=False,
-        help_text=_('Content to display on the form thank you page.')
+        help_text=_('Content to display on the form thank you page.'),
+        features=['bold', 'italic', 'h2', 'h3', 'h4', 'h5', 'ol', 'ul', 'link'],
     )
 
     submit_button_text = models.CharField(
