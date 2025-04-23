@@ -4,7 +4,7 @@
 
 # Versions
 
-This package supports Wagtail 2 and 4. There is currently no support for Wagtail 3.
+This package supports Wagtail 2, 4 and 6. There is currently no support for Wagtail 3.
 
 ### Version 1.1.X
 
