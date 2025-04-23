@@ -3,6 +3,7 @@ from ninja import NinjaAPI
 from ninja.errors import ValidationError
 from wagtail_advanced_form_builder.models import FormPage, EmailFormPage
 from .schemas import FormPageSchema, EmailFormPageSchema, FormPageUnion, ThanksPageSchema, FormPostSchema, JSONResponse
+from .tasks import send_form_page_email
 
 wagtail_advanced_form_builder_api = NinjaAPI(docs_url='/docs', title='Wagtail Advanced Form Builder API')
 api = wagtail_advanced_form_builder_api
@@ -80,6 +81,18 @@ def form_by_path(request, data: FormPostSchema):
                 form_data=form.cleaned_data,
                 page=form_page,
             )
+
+            # Send the email for the EmailFormPage
+            if isinstance(form_page, EmailFormPage):
+                email_data = {
+                    'form_title': form_page.title,
+                    'subject': form_page.subject,
+                    'from_address': form_page.from_address,
+                    'to_address': form_page.to_address,
+                    'content': form.cleaned_data,
+                }
+                send_form_page_email.delay(email_data)
+
             return 204, {
                 "thanks_page_title": form_page.thanks_page_title,
                 "thanks_page_content": form_page.thanks_page_content

@@ -3,6 +3,7 @@ django-extensions==3.2.3
 psycopg2-binary==2.9.9
 wagtail==6.2.3
 django-ninja==1.3.0
+celery
 pydantic
 anyascii
 wagtailextraicons
