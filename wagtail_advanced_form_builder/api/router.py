@@ -8,7 +8,7 @@ from wagtail_advanced_form_builder.models import FormPage, EmailFormPage
 from .schemas import FormPageSchema, EmailFormPageSchema, FormPageUnion, ThanksPageSchema, FormPostSchema, JSONResponse
 from .tasks import send_form_page_email
 
-wagtail_advanced_form_builder_api = NinjaAPI(docs_url='/docs', title='Wagtail Advanced Form Builder API')
+wagtail_advanced_form_builder_api = NinjaAPI(csrf=True, docs_url='/docs', title='Wagtail Advanced Form Builder API')
 api = wagtail_advanced_form_builder_api
 
 
@@ -78,6 +78,7 @@ def form_by_path(request, data: FormPostSchema):
     try:
         # First, validate CSRF token
         if not validate_csrf(request):
+            print("CSRF validation failed")
             return 403, {"message": "CSRF validation failed. Please refresh the page and try again."}
 
         # Search for forms with the given path - try both form types
