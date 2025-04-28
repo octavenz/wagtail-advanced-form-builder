@@ -1,6 +1,7 @@
 from django.middleware.csrf import get_token
 from django.http import JsonResponse
 from django.core.exceptions import PermissionDenied
+from django.middleware.csrf import CsrfViewMiddleware
 from ninja import NinjaAPI
 from ninja.errors import ValidationError
 from wagtail_advanced_form_builder.models import FormPage, EmailFormPage
@@ -23,6 +24,16 @@ def custom_validation_errors(request, exc):
 def get_csrf_token(request):
     token = get_token(request)
     return JsonResponse({"csrftoken": token})
+
+
+def validate_csrf(request):
+    csrf_middleware = CsrfViewMiddleware(get_response=lambda req: None)
+    try:
+        csrf_middleware.process_view(request, None, (), {})
+        return True
+    except PermissionDenied as e:
+        print("Error with validating the CSRF token:", e)
+        return False
 
 
 @api.get(
@@ -65,6 +76,10 @@ def form_by_path(request, path):
 )
 def form_by_path(request, data: FormPostSchema):
     try:
+        # First, validate CSRF token
+        if not validate_csrf(request):
+            return 403, {"message": "CSRF validation failed. Please refresh the page and try again."}
+
         # Search for forms with the given path - try both form types
         form_pages = list(FormPage.objects.filter(url_path__icontains=data.path))
         email_form_pages = list(EmailFormPage.objects.filter(url_path__icontains=data.path))
@@ -108,8 +123,6 @@ def form_by_path(request, data: FormPostSchema):
             }
         else:
             return 422, {"detail": form.errors}
-    except PermissionDenied as e:
-        return 403, {"message": "CSRF validation failed. Please refresh the page and try again."}
     except Exception as e:
         print(f"Error processing form submission: {e}")
         return 500, {"message": "Internal server error while processing form submission"}
