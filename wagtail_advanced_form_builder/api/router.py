@@ -1,4 +1,5 @@
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
 from django.core.exceptions import PermissionDenied
 from ninja import NinjaAPI
 from ninja.errors import ValidationError
@@ -19,9 +20,9 @@ def custom_validation_errors(request, exc):
 
 # Retrieve CSRF Token
 @api.get("/csrf/")
-@ensure_csrf_cookie
 def get_csrf_token(request):
-    return {"detail": "CSRF cookie set"}
+    token = get_token(request)
+    return JsonResponse({"csrftoken": token})
 
 
 @api.get(
