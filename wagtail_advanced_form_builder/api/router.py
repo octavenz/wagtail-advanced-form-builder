@@ -1,4 +1,5 @@
-from typing import Union
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.core.exceptions import PermissionDenied
 from ninja import NinjaAPI
 from ninja.errors import ValidationError
 from wagtail_advanced_form_builder.models import FormPage, EmailFormPage
@@ -14,6 +15,13 @@ def custom_validation_errors(request, exc):
     print(exc.errors)  # <--------------------- !!!!
     print(request.body)
     return api.create_response(request, {"detail": exc.errors}, status=422)
+
+
+# Retrieve CSRF Token
+@api.get("/csrf/")
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    return {"detail": "CSRF cookie set"}
 
 
 @api.get(
@@ -51,7 +59,7 @@ def form_by_path(request, path):
 
 @api.post(
     "/form_by_path/",
-    response={204: ThanksPageSchema, 422: JSONResponse, 404: JSONResponse, 500: JSONResponse},
+    response={204: ThanksPageSchema, 422: JSONResponse, 403: JSONResponse, 404: JSONResponse, 500: JSONResponse},
     operation_id="post_form_by_path"
 )
 def form_by_path(request, data: FormPostSchema):
@@ -99,7 +107,8 @@ def form_by_path(request, data: FormPostSchema):
             }
         else:
             return 422, {"detail": form.errors}
-
+    except PermissionDenied as e:
+        return 403, {"message": "CSRF validation failed. Please refresh the page and try again."}
     except Exception as e:
         print(f"Error processing form submission: {e}")
         return 500, {"message": "Internal server error while processing form submission"}
