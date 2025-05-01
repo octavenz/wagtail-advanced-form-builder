@@ -1,3 +1,7 @@
+import logging
+
+from django.conf import settings
+
 import wagtail_advanced_form_builder.constants as consts
 from pydantic import Field
 from wagtail_advanced_form_builder.models import FormPage, EmailFormPage
@@ -175,6 +179,7 @@ class JSONResponse(Schema):
 class FormPostSchema(Schema):
     form_fields: Dict[str, Any]
     path: str
+    recaptcha_token: Optional[str] = None
     # site: @TODO Handling multisite or default to site in Wagtail settings
 
 
@@ -212,6 +217,27 @@ class BaseFormPageSchema(Schema):
     use_browser_validation: bool = False
     fields: List[FormFieldUnion]
     type: str
+    use_google_recaptcha: bool = False
+    google_recaptcha_public_key: Optional[str] = None
+
+    @staticmethod
+    def resolve_google_recaptcha_public_key(obj):
+        # This method is called when serialized or deserializing
+        # So we need to handle when a dictionary is passed into this as obj
+        if isinstance(obj, dict):
+            return obj['google_recaptcha_public_key']
+
+        # This method is called when serialized/deserializing/validating
+        # So we need to handle when FormPageSchema is passed
+        if isinstance(obj, BaseFormPageSchema):
+            return obj.google_recaptcha_public_key
+
+        if obj.use_google_recaptcha:
+            if hasattr(settings, 'RECAPTCHA_PUBLIC_KEY'):
+                return settings.RECAPTCHA_PUBLIC_KEY
+            logging.warning('RECAPTCHA_PUBLIC_KEY need to be set in your settings')
+            return None
+        return None
 
     @staticmethod
     def resolve_fields(obj):

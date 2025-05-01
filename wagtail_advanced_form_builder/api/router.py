@@ -1,7 +1,9 @@
 from django.middleware.csrf import get_token
 from django.http import JsonResponse
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.middleware.csrf import CsrfViewMiddleware
+from django_recaptcha.client import submit
 from ninja import NinjaAPI
 from ninja.errors import ValidationError
 from wagtail_advanced_form_builder.models import FormPage, EmailFormPage
@@ -81,6 +83,9 @@ def form_by_path(request, data: FormPostSchema):
             print("CSRF validation failed")
             return 403, {"message": "CSRF validation failed. Please refresh the page and try again."}
 
+        # Checking if reCAPTCHA validation is required
+        recaptcha_validation_required = False
+
         # Search for forms with the given path - try both form types
         form_pages = list(FormPage.objects.filter(url_path__icontains=data.path))
         email_form_pages = list(EmailFormPage.objects.filter(url_path__icontains=data.path))
@@ -94,6 +99,37 @@ def form_by_path(request, data: FormPostSchema):
 
         # Get the single form that found
         form_page = all_forms[0]
+
+        # Check if this form requires reCAPTCHA
+        if hasattr(form_page, 'use_google_recaptcha') and form_page.use_google_recaptcha:
+            recaptcha_validation_required = True
+
+        # Validating reCAPTCHA token if required recaptcha for the form
+        if recaptcha_validation_required:
+            recaptcha_token = data.recaptcha_token
+
+            # Skip validation if no token is provided but print a warning
+            if not recaptcha_token:
+                print("WARNING: Form requires reCAPTCHA but no token was provided")
+                return 403, {"message": "reCAPTCHA validation required. Please refresh and try again."}
+
+            # Validate the token
+            recaptcha_response = submit(
+                recaptcha_token,
+                settings.RECAPTCHA_PRIVATE_KEY,
+                request.META.get('REMOTE_ADDR')
+            )
+
+            # For reCAPTCHA v2, check the validity
+            if not recaptcha_response.is_valid:
+                if 'timeout-or-duplicate' in recaptcha_response.error_codes:
+                    return 403, {"message": "reCAPTCHA token has expired or duplicated. Please submit the form again later."}
+                return 403, {"message": "reCAPTCHA validation failed. Please try again."}
+
+            # For reCAPTCHA v3, checking score
+            has_score = hasattr(recaptcha_response, 'extra_data') and 'score' in recaptcha_response.extra_data
+            if has_score and recaptcha_response.extra_data.get('score') < settings.RECAPTCHA_REQUIRED_SCORE:
+                return 403, {"message": "reCAPTCHA score too low. Please try again later."}
 
         # Process the form submission
         form_class = form_page.get_form_class()
@@ -127,6 +163,3 @@ def form_by_path(request, data: FormPostSchema):
     except Exception as e:
         print(f"Error processing form submission: {e}")
         return 500, {"message": "Internal server error while processing form submission"}
-
-
-

@@ -12,6 +12,7 @@ Is for use with Wagtail version 6.X.X
 - This will also include requirement for Django Ninja to allow for headless support
 - Complete schema models for form fields and pages
 - APIs for form retrieval and submission
+- Included optional django-recaptcha, celery, django_ninja for headless api
 
 ### Version 1.X.X
 

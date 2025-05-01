@@ -34,6 +34,17 @@ setup(
         "Programming Language :: Python :: 3",
         "Framework :: Wagtail :: 6"
     ],
-    install_requires=["Django>=4.2", "Wagtail>=6", "wagtailextraicons"],
+    install_requires=[
+        "Django>=4.2",
+        "Wagtail>=6",
+        "wagtailextraicons"
+    ],
+    extras_require={
+        'headless':  [
+            "django-recaptcha",
+            "django-ninja",
+            "celery"
+        ]
+    },
     zip_safe=False,
 )
