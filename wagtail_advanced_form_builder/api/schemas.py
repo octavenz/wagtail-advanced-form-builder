@@ -130,6 +130,20 @@ class EmailSchema(BaseFieldSchema):
     default_value: Optional[str] = None
 
 
+class SimpleDateSchema(BaseFieldSchema):
+    type: Literal["simpledate"] = consts.FIELD_TYPE_SIMPLE_DATE
+    max_length: Optional[int] = None
+    default_value: Optional[str] = None
+    minimum_age: Optional[int] = None
+    maximum_age: Optional[int] = None
+
+
+class PhoneSchema(BaseFieldSchema):
+    type: Literal["phone"] = consts.FIELD_TYPE_PHONE
+    max_length: Optional[int] = None
+    default_value: Optional[str] = None
+
+
 class HiddenSchema(BaseFieldSchema):
     type: Literal["hidden"] = consts.FIELD_TYPE_HIDDEN
     default_value: str  # Required for hidden fields
@@ -148,6 +162,8 @@ FORM_FIELDS_MAPPING = {
     consts.FIELD_TYPE_URL: UrlSchema,
     consts.FIELD_TYPE_NUMBER: NumberSchema,
     consts.FIELD_TYPE_EMAIL: EmailSchema,
+    consts.FIELD_TYPE_SIMPLE_DATE: SimpleDateSchema,
+    consts.FIELD_TYPE_PHONE: PhoneSchema,
     consts.FIELD_TYPE_HIDDEN: HiddenSchema
 }
 
@@ -165,6 +181,8 @@ FormFieldUnion = Annotated[
         UrlSchema,
         NumberSchema,
         EmailSchema,
+        SimpleDateSchema,
+        PhoneSchema,
         HiddenSchema
     ],
     Field(discriminator='type')

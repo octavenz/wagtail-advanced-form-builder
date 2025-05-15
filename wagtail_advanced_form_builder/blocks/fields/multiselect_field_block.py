@@ -24,6 +24,10 @@ class MultiSelectFieldBlock(BaseFieldBlock):
 
     display_side_by_side = None
 
+    minimum_age = None
+
+    maximum_age = None
+
     class Meta:
         form_classname = 'waf--field'
         icon = 'extraicons--multi-select'

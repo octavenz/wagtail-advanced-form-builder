@@ -60,6 +60,18 @@ class BaseFieldBlock(blocks.StructBlock):
         required=False,
     )
 
+    minimum_age = blocks.IntegerBlock(
+        help_text='You can set a minimum age if this is a DOB field. e.g. 13',
+        default=None,
+        required=False,
+    )
+
+    maximum_age = blocks.IntegerBlock(
+        help_text='You can set a maximum age if this is a DOB field. e.g. 102',
+        default=None,
+        required=False
+    )
+
     display_side_by_side = blocks.BooleanBlock(
         help_text='Display these items side by side?',
         required=False,

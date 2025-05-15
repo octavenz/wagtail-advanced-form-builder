@@ -71,6 +71,19 @@ class AbstractAdvancedFormField(AbstractFormField, ClusterableModel):
         blank=True,
     )
 
+    # For SimpleDateField
+    minimum_age = models.IntegerField(
+        default=None,
+        blank=True,
+        null=True,
+    )
+
+    maximum_age = models.IntegerField(
+        default=None,
+        blank=True,
+        null=True,
+    )
+
     # Storage for checkboxes and radios only
     display_side_by_side = models.BooleanField(
         default=False

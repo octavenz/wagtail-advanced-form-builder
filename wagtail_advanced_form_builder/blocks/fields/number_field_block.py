@@ -17,6 +17,10 @@ class NumberFieldBlock(BaseFieldBlock):
 
     max_length = None
 
+    minimum_age = None
+
+    maximum_age = None
+
     class Meta:
         form_classname = 'waf--field'
         icon = 'extraicons--number'

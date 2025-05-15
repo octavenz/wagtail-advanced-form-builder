@@ -30,6 +30,8 @@ from ..blocks.fields.multiselect_field_block import MultiSelectFieldBlock
 from ..blocks.fields.number_field_block import NumberFieldBlock
 from ..blocks.fields.radio_field_block import RadioFieldBlock
 from ..blocks.fields.url_field_block import URLFieldBlock
+from ..blocks.fields.phone_field_block import PhoneFieldBlock
+from ..blocks.fields.simpledate_field_block import SimpleDateFieldBlock
 
 
 def parse_condition_value(value):
@@ -177,6 +179,8 @@ class AbstractAdvancedFormMixin(models.Model):
             (consts.FIELD_TYPE_URL, URLFieldBlock(label=_('URL field'))),
             (consts.FIELD_TYPE_HIDDEN, HiddenFieldBlock(label=_('Hidden field'))),
             (consts.FIELD_TYPE_NUMBER, NumberFieldBlock(label=_('Number field'))),
+            (consts.FIELD_TYPE_SIMPLE_DATE, SimpleDateFieldBlock(label=_('Date field'))),
+            (consts.FIELD_TYPE_PHONE, PhoneFieldBlock(label=_('Phone field'))),
         ],
         default=None,
         null=True,
@@ -335,6 +339,8 @@ class AbstractAdvancedFormMixin(models.Model):
                 max_length=field['value'].get('max_length', None),
                 display_side_by_side=field['value'].get('display_side_by_side', False),
                 display_checkbox_label=field['value'].get('display_checkbox_label', False),
+                minimum_age=field['value'].get('minimum_age', None),
+                maximum_age=field['value'].get('maximum_age', None),
                 html_value=html_value,
                 rule_action=rule_action,
             )

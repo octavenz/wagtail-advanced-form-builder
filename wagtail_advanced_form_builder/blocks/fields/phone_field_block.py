@@ -1,11 +1,15 @@
 from .base_field_block import BaseFieldBlock
 
 
-class MultiLineFieldBlock(BaseFieldBlock):
+class PhoneFieldBlock(BaseFieldBlock):
 
     choices = None
 
     html = None
+
+    start_year = None
+
+    end_year = None
 
     buttons_style = None
 
@@ -13,16 +17,13 @@ class MultiLineFieldBlock(BaseFieldBlock):
 
     empty_label = None
 
-    max_length = None
-
     display_side_by_side = None
-
-    placeholder = None
 
     minimum_age = None
 
     maximum_age = None
 
     class Meta:
+
         form_classname = 'waf--field'
-        icon = 'extraicons--text-box'
+        icon = 'extraicons--basic-field'

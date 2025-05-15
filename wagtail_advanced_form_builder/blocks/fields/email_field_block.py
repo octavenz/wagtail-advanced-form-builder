@@ -13,6 +13,10 @@ class EmailFieldBlock(BaseFieldBlock):
 
     display_checkbox_label = None
 
+    minimum_age = None
+
+    maximum_age = None
+
     class Meta:
         form_classname = 'waf--field'
         icon = 'extraicons--email'

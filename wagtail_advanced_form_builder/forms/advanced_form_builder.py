@@ -17,6 +17,39 @@ class AdvancedFormBuilder(FormBuilder):
             options['max_length'] = 255
         return forms.CharField(**options)
 
+    def create_phone_field(self, field, options):
+        if field.max_length:
+            options['max_length'] = field.max_length
+        else:
+            options['max_length'] = 255
+
+        options['widget'] = forms.TextInput(
+            attrs={
+                'data-phone-field': True,
+            },
+        )
+        return forms.CharField(**options)
+
+    def create_simpledate_field(self, field, options):
+        widget_attrs = {
+            'required': field.required,
+            'placeholder': 'DD/MM/YYYY',
+            'maxlength': 10,
+            'data-simple-date-field': True,
+        }
+
+        if field.minimum_age:
+            widget_attrs['data-minimum-age'] = field.minimum_age
+
+        if field.maximum_age:
+            widget_attrs['data-maximum-age'] = field.maximum_age
+
+        options['widget'] = forms.TextInput(
+            attrs=widget_attrs,
+        )
+
+        return forms.CharField(**options)
+
     def create_email_field(self, field, options):
         if field.max_length:
             options['max_length'] = field.max_length
