@@ -53,7 +53,7 @@ class FormRuleSchema(Schema):
 
 class BaseFieldSchema(Schema):
     id: int
-    field_id: Optional[string] = None
+    field_id: Optional[str] = None
     type: str  # This is our discriminator field
     name: str
     label: Optional[str] = None
