@@ -10,6 +10,12 @@ class BaseFieldBlock(blocks.StructBlock):
         help_text='The label of the form field.'
     )
 
+    field_id = blocks.CharBlock(
+        max_length=255,
+        required=False,
+        help_text='An optional unique ID for the field. If not provided this is built from the label.'
+    )
+
     required = blocks.BooleanBlock(
         default=False,
         required=False,

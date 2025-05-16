@@ -41,6 +41,13 @@ class AbstractAdvancedFormField(AbstractFormField, ClusterableModel):
         choices=CHOICES
     )
 
+    field_id = models.CharField(
+        max_length=255,
+        blank=True,
+        default=None,
+        null=True,
+    )
+
     rule_action = models.CharField(
         choices=consts.FIELD_ACTION_CHOICES,
         blank=True,

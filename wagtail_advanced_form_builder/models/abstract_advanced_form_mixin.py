@@ -330,6 +330,7 @@ class AbstractAdvancedFormMixin(models.Model):
 
             form_field = self.form_field(
                 field_type=field['type'],
+                field_id=field['value'].get('field_id', None),
                 label=field['value']['label'],
                 required=field['value'].get('required', False),
                 choices=field['value'].get('choices', None),
