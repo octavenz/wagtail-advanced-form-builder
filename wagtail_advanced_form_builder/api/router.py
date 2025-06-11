@@ -73,7 +73,7 @@ def form_by_path(request, path):
 
 @api.post(
     "/form_by_path/",
-    response={204: ThanksPageSchema, 422: JSONResponse, 403: JSONResponse, 404: JSONResponse, 500: JSONResponse},
+    response={204: ThanksPageSchema, 403: JSONResponse, 404: JSONResponse, 500: JSONResponse},
     operation_id="post_form_by_path"
 )
 def form_by_path(request, data: FormPostSchema):
@@ -135,31 +135,34 @@ def form_by_path(request, data: FormPostSchema):
         form_class = form_page.get_form_class()
         form = form_class(data.form_fields)
 
-        # Validation
-        if form.is_valid():
-            # Create submission
-            form_page.get_submission_class().objects.create(
-                form_data=form.cleaned_data,
-                page=form_page,
-            )
+        # Letting Frontend handling field required logic
+        for field in form.fields.values():
+            field.required = False
 
-            # Send the email for the EmailFormPage
-            if isinstance(form_page, EmailFormPage):
-                email_data = {
-                    'form_title': form_page.title,
-                    'subject': form_page.subject,
-                    'from_address': form_page.from_address,
-                    'to_address': form_page.to_address,
-                    'content': form.cleaned_data,
-                }
-                send_form_page_email.delay(email_data)
+        # Clean the form data
+        form.full_clean()
 
-            return 204, {
-                "thanks_page_title": form_page.thanks_page_title,
-                "thanks_page_content": form_page.thanks_page_content
+        # Create submission
+        form_page.get_submission_class().objects.create(
+            form_data=form.cleaned_data,
+            page=form_page,
+        )
+
+        # Send the email for the EmailFormPage
+        if isinstance(form_page, EmailFormPage):
+            email_data = {
+                'form_title': form_page.title,
+                'subject': form_page.subject,
+                'from_address': form_page.from_address,
+                'to_address': form_page.to_address,
+                'content': form.cleaned_data,
             }
-        else:
-            return 422, {"detail": form.errors}
+            send_form_page_email.delay(email_data)
+
+        return 204, {
+            "thanks_page_title": form_page.thanks_page_title,
+            "thanks_page_content": form_page.thanks_page_content
+        }
     except Exception as e:
         print(f"Error processing form submission: {e}")
         return 500, {"message": "Internal server error while processing form submission"}

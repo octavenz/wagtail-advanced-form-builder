@@ -25,13 +25,24 @@ Form Details:
 
         # Add each form field with proper spacing
         for key, value in content.items():
-            # Skip empty value and HTML fields
-            if key == 'html-field' and not value:
+            # Skip HTML fields
+            if key == 'html-field':
                 continue
 
             # Format field name from slug to title
             field_name = key.replace('-', ' ').title()
-            email_content += f"\n{field_name}: {value}"
+
+            # Handle different value types
+            if isinstance(value, list):
+                formatted_value = ', '.join(str(v) for v in value if v)
+                if not formatted_value:
+                    formatted_value = 'N/A'
+            elif value in (None, '', [], {}):
+                formatted_value = 'N/A'
+            else:
+                formatted_value = str(value)
+
+            email_content += f"\n{field_name}: {formatted_value}"
 
         # Send the email
         send_mail(
@@ -48,3 +59,4 @@ Form Details:
     except Exception as e:
         logger.error(f"Failed to send email: {str(e)}")
         self.retry(exc=e, countdown=60)  # Retry after 60 seconds
+        return None
