@@ -10,10 +10,10 @@ logger = get_task_logger(__name__)
 @shared_task(bind=True, max_retries=2, ignore_result=True)
 def send_form_page_email(self, email_data):
     try:
-        form_title = email_data.get('form_title')
+        form_title = email_data.get('form_title', '')
         subject = email_data.get('subject', 'Form Submission')
         from_address = email_data.get('from_address', settings.DEFAULT_FROM_EMAIL)
-        to_address = email_data.get('to_address')
+        to_address = email_data.get('to_address', '')
         content = email_data.get('content', {})
 
         # Format the email content with better spacing and structure
@@ -29,27 +29,32 @@ Form Details:
             if key == 'html-field':
                 continue
 
+            # Skip empty values: None, '', [], or {}
+            if value in (None, '', [], {}):
+                continue
+
             # Format field name from slug to title
             field_name = key.replace('-', ' ').title()
 
-            # Handle different value types
+            # If it's a list, join the string together
             if isinstance(value, list):
                 formatted_value = ', '.join(str(v) for v in value if v)
                 if not formatted_value:
-                    formatted_value = 'N/A'
-            elif value in (None, '', [], {}):
-                formatted_value = 'N/A'
+                    continue  # Skip if list was empty
             else:
                 formatted_value = str(value)
 
             email_content += f"\n{field_name}: {formatted_value}"
+
+        # Format recipient list of address emails
+        recipient_list = [email.strip() for email in to_address.split(',') if email.strip()]
 
         # Send the email
         send_mail(
             subject=subject,
             message=email_content,
             from_email=from_address,
-            recipient_list=[to_address],
+            recipient_list=recipient_list,
             fail_silently=False,
         )
 
