@@ -107,9 +107,7 @@ class AbstractAdvancedFormField(AbstractFormField, ClusterableModel):
         This ensures fields with duplicate labels don't cause data collision.
         """
         base_clean_name = clean_form_field_name(self.label)
-        if self.id:
-            return f"{base_clean_name}-{self.id}"
-        return base_clean_name
+        return f"{base_clean_name}-{self.id}"
 
     class Meta:
         abstract = True

@@ -56,6 +56,7 @@ class BaseFieldSchema(Schema):
     field_id: Optional[str] = None
     type: str  # This is our discriminator field
     name: str
+    unique_name: Optional[str] = None # Discriminator field name for submission
     label: Optional[str] = None
     required: Optional[bool] = False
     help_text: Optional[str] = None
@@ -333,6 +334,7 @@ class BaseFormPageSchema(Schema):
                 # Change the field name to clean_name for uniqueness
                 if idx < len(all_form_fields):
                     form_field = all_form_fields[idx]
+                    block_data['unique_name'] = form_field.clean_name
                     block_data['name'] = form_field.clean_name
 
                 instance = block_schema(**block_data)
