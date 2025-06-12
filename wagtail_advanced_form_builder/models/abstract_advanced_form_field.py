@@ -102,12 +102,7 @@ class AbstractAdvancedFormField(AbstractFormField, ClusterableModel):
 
     @property
     def clean_name(self):
-        """
-        Generate a unique clean name by combining the field ID with the label.
-        This ensures fields with duplicate labels don't cause data collision.
-        """
-        base_clean_name = clean_form_field_name(self.label)
-        return f"{base_clean_name}-{self.id}"
+        return clean_form_field_name(self.label)
 
     class Meta:
         abstract = True

@@ -5,6 +5,7 @@ from django.conf import settings
 import wagtail_advanced_form_builder.constants as consts
 from pydantic import Field
 from wagtail_advanced_form_builder.models import FormPage, EmailFormPage
+from wagtail_advanced_form_builder.utils import clean_form_field_name
 
 from wagtail_advanced_form_builder.utils import modified_html
 from ninja import Schema
@@ -334,8 +335,11 @@ class BaseFormPageSchema(Schema):
                 # Change the field name to clean_name for uniqueness
                 if idx < len(all_form_fields):
                     form_field = all_form_fields[idx]
-                    block_data['unique_name'] = form_field.clean_name
-                    block_data['name'] = form_field.clean_name
+                    field_unique_id = form_field.id if form_field.id else idx
+                    base_clean_name = clean_form_field_name(form_field.label)
+                    unique_clean_name = f"{base_clean_name}-{field_unique_id}"
+                    block_data['unique_name'] = unique_clean_name
+                    block_data['name'] = base_clean_name
 
                 instance = block_schema(**block_data)
                 form_fields.append(instance)
