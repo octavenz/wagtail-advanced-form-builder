@@ -5,9 +5,7 @@ from django.conf import settings
 import wagtail_advanced_form_builder.constants as consts
 from pydantic import Field
 from wagtail_advanced_form_builder.models import FormPage, EmailFormPage
-from wagtail_advanced_form_builder.utils import clean_form_field_name
-
-from wagtail_advanced_form_builder.utils import modified_html
+from wagtail_advanced_form_builder.utils import modified_html, clean_form_field_name
 from ninja import Schema
 from typing import Literal, List, Optional, Union, Dict, Any, Type, Annotated
 
@@ -332,14 +330,14 @@ class BaseFormPageSchema(Schema):
                         # Try to get a string representation for other types
                         block_data[key] = str(value)
 
-                # Change the field name to clean_name for uniqueness
+                # Generate unique clean_name using the index
                 if idx < len(all_form_fields):
                     form_field = all_form_fields[idx]
                     field_unique_id = form_field.id if form_field.id else idx
                     base_clean_name = clean_form_field_name(form_field.label)
                     unique_clean_name = f"{base_clean_name}-{field_unique_id}"
                     block_data['clean_name'] = unique_clean_name
-                    block_data['name'] = base_clean_name
+                    block_data['name'] = unique_clean_name
 
                 instance = block_schema(**block_data)
                 form_fields.append(instance)
