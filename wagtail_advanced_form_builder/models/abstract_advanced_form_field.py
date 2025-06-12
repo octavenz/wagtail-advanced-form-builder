@@ -108,7 +108,7 @@ class AbstractAdvancedFormField(AbstractFormField, ClusterableModel):
         """
         base_clean_name = clean_form_field_name(self.label)
         if self.id:
-            return f"{base_clean_name}_{self.id}"
+            return f"{base_clean_name}-{self.id}"
         return base_clean_name
 
     class Meta:

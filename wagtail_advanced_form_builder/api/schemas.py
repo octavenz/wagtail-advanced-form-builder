@@ -273,9 +273,7 @@ class BaseFormPageSchema(Schema):
         # This method is called when serialized/deserializing/validating
         # so we need to handle when a Django Model instance is passed in
         form_fields = []
-        clean_name_lookup = {
-            form_field.label: form_field.clean_name for form_field in obj.get_form_fields()
-        }
+        all_form_fields = list(obj.get_form_fields())
 
         for idx, block in enumerate(obj.form):
             try:
@@ -289,9 +287,6 @@ class BaseFormPageSchema(Schema):
                 for key, value in block.value.items():
                     if isinstance(value, (str, int, float, bool, type(None))):
                         block_data[key] = value
-                        # get clean name from form field
-                        if key == 'label':
-                            block_data['name'] = clean_name_lookup[value]
 
                     elif key == 'rules' and (isinstance(value, dict) or hasattr(value, 'items')):
                         # Create a dictionary for rules
@@ -334,6 +329,11 @@ class BaseFormPageSchema(Schema):
                     else:
                         # Try to get a string representation for other types
                         block_data[key] = str(value)
+
+                # Change the field name to clean_name for uniqueness
+                if idx < len(all_form_fields):
+                    form_field = all_form_fields[idx]
+                    block_data['name'] = form_field.clean_name
 
                 instance = block_schema(**block_data)
                 form_fields.append(instance)
