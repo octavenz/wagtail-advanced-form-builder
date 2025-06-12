@@ -337,7 +337,7 @@ class BaseFormPageSchema(Schema):
                     base_clean_name = clean_form_field_name(form_field.label)
                     unique_clean_name = f"{base_clean_name}-{field_unique_id}"
                     block_data['clean_name'] = unique_clean_name
-                    block_data['name'] = unique_clean_name
+                    block_data['name'] = base_clean_name
 
                 instance = block_schema(**block_data)
                 form_fields.append(instance)
