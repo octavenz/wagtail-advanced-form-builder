@@ -14,7 +14,7 @@ class CheckboxesFieldBlock(BaseFieldBlock):
 
     default_value = blocks.ListBlock(
         blocks.TextBlock(
-            required=False,
+            required=True,
             icon='extraicons--heading-icon',
             help_text='Enter a value that matches a checkbox choice above to have it ticked by default.'
         ),

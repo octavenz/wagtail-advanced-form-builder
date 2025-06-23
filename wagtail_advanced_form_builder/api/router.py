@@ -148,7 +148,7 @@ def form_by_path(request, data: FormPostSchema):
             page=form_page,
         )
 
-        # Send the email for the EmailFormPage
+        # Send the email for the EmailFormPage only if there is a list of to_address
         if isinstance(form_page, EmailFormPage):
             email_data = {
                 'form_title': form_page.title,
@@ -157,7 +157,8 @@ def form_by_path(request, data: FormPostSchema):
                 'to_address': form_page.to_address,
                 'content': form.cleaned_data,
             }
-            send_form_page_email.delay(email_data)
+            if email_data.get('to_address'):
+                send_form_page_email.delay(email_data)
 
         return 204, {
             "thanks_page_title": form_page.thanks_page_title,
