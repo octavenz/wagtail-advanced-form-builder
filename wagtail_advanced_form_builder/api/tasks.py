@@ -1,7 +1,6 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
-
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
 logger = get_task_logger(__name__)
@@ -16,14 +15,8 @@ def send_form_page_email(self, email_data):
         to_address = email_data.get('to_address', '')
         content = email_data.get('content', {})
 
-        # Format the email content with better spacing and structure
-        email_content = f"""
-New submission received for {form_title}
-
-Form Details:
-"""
-
-        # Add each form field with proper spacing
+        # Processing email template
+        form_fields = []
         for key, value in content.items():
             # Skip HTML fields
             if key == 'html-field':
@@ -44,19 +37,29 @@ Form Details:
             else:
                 formatted_value = str(value)
 
-            email_content += f"\n{field_name}: {formatted_value}"
+            form_fields.append((field_label, formatted_value))
+
+        # Prepare email context data
+        email_context = {
+            'form_title': form_title,
+            'form_fields': form_fields,
+        }
+
+        html_content = render_to_string('emails/form_submission.html', email_context)
+        plain_content = strip_tags(html_content)
 
         # Format recipient list of address emails
         recipient_list = [email.strip() for email in to_address.split(',') if email.strip()]
 
         # Send the email
-        send_mail(
+        email = EmailMultiAlternatives(
             subject=subject,
-            message=email_content,
+            body=plain_content,
             from_email=from_address,
-            recipient_list=recipient_list,
-            fail_silently=False,
+            to=recipient_list,
         )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
 
         logger.info(f"Email sent successfully to {to_address}")
         return True
