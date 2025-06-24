@@ -1,5 +1,7 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
