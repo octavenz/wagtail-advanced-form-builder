@@ -1,6 +1,6 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMessage
 from django.conf import settings
 
 logger = get_task_logger(__name__)
@@ -46,19 +46,18 @@ def send_form_page_email(self, email_data):
         }
 
         html_content = render_to_string('emails/form_submission.html', email_context)
-        plain_content = strip_tags(html_content)
 
         # Format recipient list of address emails
         recipient_list = [email.strip() for email in to_address.split(',') if email.strip()]
 
         # Send the email
-        email = EmailMultiAlternatives(
+        email = EmailMessage(
             subject=subject,
-            body=plain_content,
+            body=html_content,
             from_email=from_address,
             to=recipient_list,
         )
-        email.attach_alternative(html_content, "text/html")
+        email.content_subtype = "html"
         email.send()
 
         logger.info(f"Email sent successfully to {to_address}")
