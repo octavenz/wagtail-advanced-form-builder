@@ -10,7 +10,7 @@ from wagtail_advanced_form_builder.models import FormPage, EmailFormPage
 from .schemas import FormPageSchema, EmailFormPageSchema, FormPageUnion, ThanksPageSchema, FormPostSchema, JSONResponse
 from .tasks import send_form_page_email
 
-wagtail_advanced_form_builder_api = NinjaAPI(csrf=True, docs_url='/docs', title='Wagtail Advanced Form Builder API')
+wagtail_advanced_form_builder_api = NinjaAPI(docs_url='/docs', title='Wagtail Advanced Form Builder API')
 api = wagtail_advanced_form_builder_api
 
 
